@@ -19,10 +19,10 @@ public class RobotMap {
 	public static final int rightStickX = 5;
 	
 	//Motor Controllers
-	public static final int frontLeftTalonChannel = 1;
-	public static final int frontRightTalonChannel = 2;
-	public static final int rearLeftTalonChannel = 3;
-	public static final int rearRightTalonChannel = 4;
+	public static final int frontLeftTalonChannel = 0;
+	public static final int frontRightTalonChannel = 1;
+	public static final int rearLeftTalonChannel = 2;
+	public static final int rearRightTalonChannel = 3;
 	
 	//Solenoids
 	public static final int shiftSolenoid1Port = 1;
