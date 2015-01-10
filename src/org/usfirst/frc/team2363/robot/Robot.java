@@ -1,12 +1,18 @@
 
 package org.usfirst.frc.team2363.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import org.usfirst.frc.team2363.robot.commands.JoystickDrive;
+
+import org.usfirst.frc.team2363.robot.commands.PDPMonitoringCommand;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
+import org.usfirst.frc.team2363.robot.util.PropertyReader;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -16,20 +22,24 @@ import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	
+	static {
+		PropertyReader.loadProperties("RobotChannels.properties");
+	}
 
-	public static final Drivetrain drivetrain = new Drivetrain();
-	public static OI oi;
+	public static Drivetrain drivetrain = new Drivetrain();
+	public static OI oi = new OI();
+	public static PowerDistributionPanel pdp = new PowerDistributionPanel();
+	public static Compressor compressor = new Compressor();
 
-    Command autonomousCommand;
+    private Command autonomousCommand;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-		oi = new OI();
-        // instantiate the command used for the autonomous period
-        autonomousCommand = new JoystickDrive();
+        
     }
 	
 	public void disabledPeriodic() {
@@ -37,7 +47,7 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-        // schedule the autonomous command (example)
+    	autonomousCommand = oi.getAutoCommand();
         if (autonomousCommand != null) autonomousCommand.start();
     }
 
@@ -54,13 +64,14 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
+        new PDPMonitoringCommand().start();
     }
 
     /**
      * This function is called when the disabled button is hit.
      * You can use it to reset subsystems before shutting down.
      */
-    public void disabledInit(){
+    public void disabledInit() {
 
     }
 
