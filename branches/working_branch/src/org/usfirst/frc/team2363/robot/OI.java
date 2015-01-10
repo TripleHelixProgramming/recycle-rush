@@ -1,16 +1,11 @@
 package org.usfirst.frc.team2363.robot;
 
-import static org.usfirst.frc.team2363.robot.RobotMap.highSpeedScaling;
-import static org.usfirst.frc.team2363.robot.RobotMap.leftStickY;
-import static org.usfirst.frc.team2363.robot.RobotMap.leftTrigger;
-import static org.usfirst.frc.team2363.robot.RobotMap.lowSpeedScaling;
-import static org.usfirst.frc.team2363.robot.RobotMap.ps4Port;
-import static org.usfirst.frc.team2363.robot.RobotMap.rightStickX;
-import static org.usfirst.frc.team2363.robot.RobotMap.shiftDownButtonPort;
-import static org.usfirst.frc.team2363.robot.RobotMap.shiftUpButtonPort;
+import static org.usfirst.frc.team2363.robot.RobotMap.*;
+import static org.usfirst.frc.team2363.robot.subsystems.Drivetrain.ShifterState.*;
 
-import org.usfirst.frc.team2363.robot.commands.ShiftCommand;
-import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.ShiftCommand;
+import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
+import org.usfirst.frc.team2363.robot.util.SelectableCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -20,50 +15,53 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-
-
+	
 	//Controllers
 	private Joystick ps4Controller;
+	public Joystick operatorControl;
+	private AutonomousSelector autoSelector;
 	
 	public OI() {
 		
 		//Controllers
-		ps4Controller = new Joystick(1);
+		ps4Controller = new Joystick(PS4_PORT);
+		operatorControl = new Joystick(2);
+		
 		
 		//Joystick Buttons
-		JoystickButton shiftDownButton = new JoystickButton(ps4Controller, shiftDownButtonPort);
-		JoystickButton shiftUpButton = new JoystickButton(ps4Controller, shiftUpButtonPort);
+		JoystickButton shiftDownButton = new JoystickButton(ps4Controller, SHIFT_DOWN_BUTTON_PORT);
+		JoystickButton shiftUpButton = new JoystickButton(ps4Controller, SHIFT_UP_BUTON_PORT);
 		
-		shiftUpButton.whenPressed(new ShiftCommand(Drivetrain.SHIFT_UP));
-		shiftDownButton.whenPressed(new ShiftCommand(Drivetrain.SHIFT_DOWN));
+		shiftUpButton.whenPressed(new ShiftCommand(HIGH));
+		shiftDownButton.whenPressed(new ShiftCommand(LOW));
+		
+		//Autonomous 
+		JoystickButton autoSelector1 = new JoystickButton(operatorControl, 1);
+		JoystickButton autoSelector2 = new JoystickButton(operatorControl, 2);
+		JoystickButton autoSelector3 = new JoystickButton(operatorControl, 3);
+		
+		autoSelector = new AutonomousSelector(autoSelector1, autoSelector2, autoSelector3);
+		
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
+	public SelectableCommand getAutoCommand() {
+		return autoSelector.getSelectedCommand();
+		
+	}
 	public double getThrottle() {
 		//Inverted Throttle
-		if (ps4Controller.getRawAxis(leftTrigger) > 0) {
-			return -ps4Controller.getRawAxis(leftStickY);	
+		if (ps4Controller.getRawAxis(LEFT_TRIGGER) > 0) {
+			return -ps4Controller.getRawAxis(LEFT_STICK_Y);	
 		} else {
 		//Regular Throttle
-			return ps4Controller.getRawAxis(leftStickY);
+			return ps4Controller.getRawAxis(LEFT_STICK_Y);
 		}
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
 	public double getTurn() {
-		return ps4Controller.getRawAxis(rightStickX) * getTurnScaling(getThrottle());
+		return ps4Controller.getRawAxis(RIGHT_STICK_X) * getTurnScaling(getThrottle());
 	}
 
 	private double getTurnScaling(double x) {
-		return - Math.abs((lowSpeedScaling - highSpeedScaling)) * x + lowSpeedScaling;
+		return -Math.abs(LOW_SPEED_SCALING - HIGH_SPEED_SCALING) * x + LOW_SPEED_SCALING;
 	}
-
 }
-
-
