@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.usfirst.frc.team2363.robot.commands.PDPMonitoringCommand;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
 import org.usfirst.frc.team2363.robot.util.PropertyReader;
 
@@ -28,6 +29,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public static Drivetrain drivetrain = new Drivetrain();
+	public static Elevator elevator = new Elevator();
 	public static OI oi = new OI();
 	public static PowerDistributionPanel pdp = new PowerDistributionPanel();
 	public static Compressor compressor = new Compressor();
