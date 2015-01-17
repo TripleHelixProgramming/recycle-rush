@@ -9,8 +9,8 @@ public class AutonomousSelector extends BinarySelector {
 	
 	private List<SelectableCommand> commands = new ArrayList<>();
 	
-	public AutonomousSelector(Button button1, Button button2, Button button3) {
-		super(button1, button2, button3);
+	public AutonomousSelector(Button... buttons) {
+		super(buttons);
 	}
 	
 	
