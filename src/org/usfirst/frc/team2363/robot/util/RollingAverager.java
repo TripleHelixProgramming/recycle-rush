@@ -11,6 +11,14 @@ public class RollingAverager {
 		this.count = count;
 	}
 	
+	public RollingAverager(int count, double initValue) {
+		this(count);
+		
+		for (int i = 0; i < count; i++) {
+			list.add(initValue);
+		}
+	}
+	
 	public void addValue(double value) {
 		list.add(value);
 		if (list.size() > count) {
@@ -19,10 +27,15 @@ public class RollingAverager {
 	}
 	
 	public double getAverage() {
+		if (list.isEmpty()) {
+			return 0;
+		}
 		double sum = 0;
 		for (double d : list) {
 			sum += d;
 		}
 		return sum / list.size();
 	}
+	
+	
 }

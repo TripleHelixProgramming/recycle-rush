@@ -1,40 +1,31 @@
+package org.usfirst.frc.team2363.robot.commands.elevator;
 
-package org.usfirst.frc.team2363.robot.commands.drivetrain;
+import org.usfirst.frc.team2363.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-
-import org.usfirst.frc.team2363.robot.util.TimedPrinter;
-
-import static org.usfirst.frc.team2363.robot.Robot.drivetrain;
-import static org.usfirst.frc.team2363.robot.Robot.oi;
 
 /**
  *
  */
-public class JoystickDrive extends Command {
-	
-	private TimedPrinter timedPrinter = new TimedPrinter(500);
+public class ResetElevatorEncoder extends Command {
 
-    public JoystickDrive() {
+    public ResetElevatorEncoder() {
         // Use requires() here to declare subsystem dependencies
-        requires(drivetrain);
+        // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.elevator.resetEncoder();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	drivetrain.arcadeDrive(oi.getThrottle(), oi.getTurn());
-    	timedPrinter.print(oi.getThrottle());
-    	timedPrinter.print(oi.getTurn());
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true

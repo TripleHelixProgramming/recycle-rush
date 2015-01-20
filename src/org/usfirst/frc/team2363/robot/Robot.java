@@ -7,13 +7,11 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2363.robot.commands.PDPMonitoringCommand;
-import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
-import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
-import org.usfirst.frc.team2363.robot.util.PropertyReader;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,17 +22,25 @@ import org.usfirst.frc.team2363.robot.util.PropertyReader;
  */
 public class Robot extends IterativeRobot {
 	
-	static {
-		PropertyReader.loadProperties("RobotChannels.properties");
-	}
+//	static {
+//		PropertyReader.loadProperties("RobotChannels.properties");
+//	}
 
-	public static Drivetrain drivetrain = new Drivetrain();
-	public static Elevator elevator = new Elevator();
-	public static OI oi = new OI();
-	public static PowerDistributionPanel pdp = new PowerDistributionPanel();
-	public static Compressor compressor = new Compressor();
+	public static OI oi;
+	public static PowerDistributionPanel pdp;
+	public static Drivetrain drivetrain;
+	public static Elevator elevator;
+	public static Compressor compressor;
 
     private Command autonomousCommand;
+    
+    public Robot() {
+    	pdp = new PowerDistributionPanel();
+    	drivetrain = new Drivetrain();
+    	elevator = new Elevator();
+    	compressor = new Compressor();
+    	oi = new OI();
+    }
 
     /**
      * This function is run when the robot is first started up and should be
@@ -66,7 +72,7 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
-        new PDPMonitoringCommand().start();
+//        new PDPMonitoringCommand().start();
     }
 
     /**
@@ -82,6 +88,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        SmartDashboard.putNumber("Encoder Position", elevator.getPosition());
     }
     
     /**
