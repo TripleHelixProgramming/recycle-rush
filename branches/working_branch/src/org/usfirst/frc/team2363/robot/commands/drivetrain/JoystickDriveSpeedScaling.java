@@ -1,22 +1,19 @@
-
 package org.usfirst.frc.team2363.robot.commands.drivetrain;
-
-import edu.wpi.first.wpilibj.command.Command;
-
-import org.usfirst.frc.team2363.robot.util.TimedPrinter;
 
 import static org.usfirst.frc.team2363.robot.Robot.drivetrain;
 import static org.usfirst.frc.team2363.robot.Robot.oi;
 
+import org.usfirst.frc.team2363.robot.OI;
+import org.usfirst.frc.team2363.robot.RobotMap;
+
+import edu.wpi.first.wpilibj.command.Command;
+
 /**
  *
  */
-public class JoystickDrive extends Command {
-	
-	private TimedPrinter timedPrinter = new TimedPrinter(500);
+public class JoystickDriveSpeedScaling extends Command {
 
-    public JoystickDrive() {
-        // Use requires() here to declare subsystem dependencies
+    public JoystickDriveSpeedScaling() {
         requires(drivetrain);
     }
 
@@ -26,10 +23,10 @@ public class JoystickDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	drivetrain.arcadeDrive(oi.getThrottle(), oi.getTurn());
-    	timedPrinter.print(oi.getThrottle());
-    	timedPrinter.print(oi.getTurn());
-    	
+    	double currentSpeed = (drivetrain.getLeftSpeed() + drivetrain.getRightSpeed()) / 2;
+    	double currentSpeedPercentage = currentSpeed / RobotMap.ROBOT_TOP_SPEED;
+    	double turnPower = OI.getTurnScaling(currentSpeedPercentage) * oi.getTurn();
+    	drivetrain.arcadeDrive(oi.getThrottle(), turnPower);
     }
 
     // Make this return true when this Command no longer needs to run execute()

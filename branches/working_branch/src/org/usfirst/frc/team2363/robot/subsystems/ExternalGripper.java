@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
+import org.usfirst.frc.team2363.robot.util.ClawPosition;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -12,6 +14,11 @@ public class ExternalGripper extends Subsystem {
 		STOWED,
 		STEP,
 		FLOOR;
+	}
+	
+	public enum ExternalExtensionPosition {
+		EXTEND,
+		RETRACT;
 	}
 	
     private Solenoid claw;
@@ -28,16 +35,28 @@ public class ExternalGripper extends Subsystem {
         
     }
     
-    public void openClaw(boolean open) {
-    	claw.set(open);
+    public void openClaw(ClawPosition position) {
+    	if (position == ClawPosition.OPEN) {
+    		claw.set(true);
+    	} else {
+    		claw.set(false);
+    	}
     }
     
-    public void extendFirstLevel(boolean extend) {
-    	firstExtension.set(extend);
+    public void extendFirstLevel(ExternalExtensionPosition position) {
+    	if (position == ExternalExtensionPosition.EXTEND) {
+    		firstExtension.set(true);
+    	} else {
+    		firstExtension.set(false);
+    	}
     }
     
-    public void extendSecondLevel(boolean extend) {
-    	secondExtension.set(extend);
+    public void extendSecondLevel(ExternalExtensionPosition position) {
+    	if (position == ExternalExtensionPosition.EXTEND) {
+    		secondExtension.set(true);
+    	} else {
+    		secondExtension.set(false);
+    	}
     }
     
 }

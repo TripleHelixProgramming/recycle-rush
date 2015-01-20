@@ -3,12 +3,21 @@ package org.usfirst.frc.team2363.robot;
 import static org.usfirst.frc.team2363.robot.RobotMap.*;
 import static org.usfirst.frc.team2363.robot.subsystems.Drivetrain.ShifterState.*;
 
+import org.usfirst.frc.team2363.robot.commands.SequentialCommandGroup;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.ShiftCommand;
+import org.usfirst.frc.team2363.robot.commands.elevator.AutomatedHumanPlayerStacking;
+import org.usfirst.frc.team2363.robot.commands.elevator.ElevatorCommand;
+import org.usfirst.frc.team2363.robot.commands.elevator.ResetElevatorEncoder;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator.ElevatorPosition;
 import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
+import org.usfirst.frc.team2363.robot.util.LimitSwitch;
+import org.usfirst.frc.team2363.robot.util.RollingAverager;
 import org.usfirst.frc.team2363.robot.util.SelectableCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -16,24 +25,30 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
 	
+	private RollingAverager throttleAverager = new RollingAverager(12, 0);
 	//Controllers
 	private Joystick ps4Controller;
-	public Joystick operatorControl;
+	private Joystick operatorControl;
 	private AutonomousSelector autoSelector;
 	
 	public OI() {
-		
 		//Controllers
 		ps4Controller = new Joystick(PS4_PORT);
 		operatorControl = new Joystick(2);
 		
 		
 		//Joystick Buttons
-		JoystickButton shiftDownButton = new JoystickButton(ps4Controller, SHIFT_DOWN_BUTTON_PORT);
-		JoystickButton shiftUpButton = new JoystickButton(ps4Controller, SHIFT_UP_BUTON_PORT);
+		JoystickButton throttleScalingButton = new JoystickButton(ps4Controller, THROTTLE_SCALING_BUTTON);
+		JoystickButton shiftDownButton = new JoystickButton(ps4Controller, SHIFT_DOWN_BUTTON);
+		JoystickButton shiftUpButton = new JoystickButton(ps4Controller, SHIFT_UP_BUTTON);
+		JoystickButton scoreButton = new JoystickButton(ps4Controller, SCORE_BUTTON);
+		JoystickButton carryButton = new JoystickButton(ps4Controller, CARRY_BUTTON);
 		
 		shiftUpButton.whenPressed(new ShiftCommand(HIGH));
 		shiftDownButton.whenPressed(new ShiftCommand(LOW));
+		scoreButton.whenPressed(new ElevatorCommand(ElevatorPosition.GROUND));
+		carryButton.whenPressed(new ElevatorCommand(ElevatorPosition.CARRY));
+		throttleScalingButton.whenActive(new JoystickDrive());
 		
 		//Autonomous 
 		JoystickButton autoSelector1 = new JoystickButton(operatorControl, 1);
@@ -42,6 +57,23 @@ public class OI {
 		
 		autoSelector = new AutonomousSelector(autoSelector1, autoSelector2, autoSelector3);
 		
+		//Elevator commands
+		SmartDashboard.putData(ElevatorPosition.GROUND.getName(), new ElevatorCommand(ElevatorPosition.GROUND));
+		SmartDashboard.putData(ElevatorPosition.CARRY.getName(), new ElevatorCommand(ElevatorPosition.CARRY));
+		SmartDashboard.putData(ElevatorPosition.SCORE_PLATFORM.getName(), new ElevatorCommand(ElevatorPosition.SCORE_PLATFORM));
+		SmartDashboard.putData(ElevatorPosition.STEP_CARRY.getName(), new ElevatorCommand(ElevatorPosition.STEP_CARRY));
+		SmartDashboard.putData(ElevatorPosition.STEP_PLACE.getName(), new ElevatorCommand(ElevatorPosition.STEP_PLACE));
+		SmartDashboard.putData(ElevatorPosition.STACK_TWO_CARRY.getName(), new ElevatorCommand(ElevatorPosition.STACK_TWO_CARRY));
+		SmartDashboard.putData(ElevatorPosition.STACK_TWO_PLACE.getName(), new ElevatorCommand(ElevatorPosition.STACK_TWO_PLACE));
+		SmartDashboard.putData(ElevatorPosition.STACK_THREE_CARRY.getName(), new ElevatorCommand(ElevatorPosition.STACK_THREE_CARRY));
+		SmartDashboard.putData(ElevatorPosition.STACK_STEP_CARRY.getName(), new ElevatorCommand(ElevatorPosition.STACK_STEP_CARRY));
+		SmartDashboard.putData(ElevatorPosition.STACK_STEP_PLACE.getName(), new ElevatorCommand(ElevatorPosition.STACK_STEP_PLACE));
+		SmartDashboard.putData("Automated Human Player Station", new AutomatedHumanPlayerStacking());
+		SmartDashboard.putData("Automated Human Player Station 2", new SequentialCommandGroup(new ElevatorCommand(ElevatorPosition.CARRY), new ElevatorCommand(ElevatorPosition.STACK_THREE_CARRY)));
+		
+		//Limit Switches
+		LimitSwitch elevatorLimit = new LimitSwitch(ELEVATOR_LIMIT_CHANNEL);
+		elevatorLimit.whenActive(new ResetElevatorEncoder());
 	}
 	public SelectableCommand getAutoCommand() {
 		return autoSelector.getSelectedCommand();
@@ -50,18 +82,19 @@ public class OI {
 	public double getThrottle() {
 		//Inverted Throttle
 		if (ps4Controller.getRawAxis(LEFT_TRIGGER) > 0) {
-			return -ps4Controller.getRawAxis(LEFT_STICK_Y);	
+			throttleAverager.addValue(-ps4Controller.getRawAxis(LEFT_STICK_Y));	
 		} else {
 		//Regular Throttle
-			return ps4Controller.getRawAxis(LEFT_STICK_Y);
+			throttleAverager.addValue(ps4Controller.getRawAxis(LEFT_STICK_Y));
 		}
+		return throttleAverager.getAverage();
 	}
 	
 	public double getTurn() {
 		return ps4Controller.getRawAxis(RIGHT_STICK_X) * getTurnScaling(getThrottle());
 	}
 
-	private double getTurnScaling(double x) {
+	public static double getTurnScaling(double x) {
 		return -Math.abs(LOW_SPEED_SCALING - HIGH_SPEED_SCALING) * x + LOW_SPEED_SCALING;
 	}
 }
