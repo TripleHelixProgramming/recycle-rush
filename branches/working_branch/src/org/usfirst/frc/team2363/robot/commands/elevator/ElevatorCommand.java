@@ -14,6 +14,7 @@ import static org.usfirst.frc.team2363.robot.Robot.elevator;
 public class ElevatorCommand extends PIDCommand {
 
 	private ElevatorPosition position;
+	
     public ElevatorCommand(ElevatorPosition position) {
     	super(1.5, 0, 1);
         requires(elevator);
@@ -40,7 +41,7 @@ public class ElevatorCommand extends PIDCommand {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return this.getPIDController().onTarget();
+        return getPIDController().onTarget() || elevator.isAtTopLimit();
     }
 
     // Called once after isFinished returns true
@@ -48,7 +49,7 @@ public class ElevatorCommand extends PIDCommand {
     	if (position != ElevatorPosition.GROUND) {
     		elevator.setBrake(BrakePosition.ENGAGED);
     	}
-    	this.getPIDController().disable();
+    	getPIDController().disable();
     	SmartDashboard.putString("Current elevator position", position.getName());
     }
 

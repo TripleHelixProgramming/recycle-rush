@@ -4,9 +4,11 @@ import static org.usfirst.frc.team2363.robot.RobotMap.*;
 import static org.usfirst.frc.team2363.robot.subsystems.Drivetrain.ShifterState.*;
 
 import org.usfirst.frc.team2363.robot.commands.SequentialCommandGroup;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.DriveAtSpeed;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.DriveToToteCommand;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.ShiftCommand;
-import org.usfirst.frc.team2363.robot.commands.elevator.AutomatedHumanPlayerStacking;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.TurnTowardsTote;
 import org.usfirst.frc.team2363.robot.commands.elevator.ElevatorCommand;
 import org.usfirst.frc.team2363.robot.commands.elevator.ResetElevatorEncoder;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.ElevatorPosition;
@@ -68,12 +70,16 @@ public class OI {
 		SmartDashboard.putData(ElevatorPosition.STACK_THREE_CARRY.getName(), new ElevatorCommand(ElevatorPosition.STACK_THREE_CARRY));
 		SmartDashboard.putData(ElevatorPosition.STACK_STEP_CARRY.getName(), new ElevatorCommand(ElevatorPosition.STACK_STEP_CARRY));
 		SmartDashboard.putData(ElevatorPosition.STACK_STEP_PLACE.getName(), new ElevatorCommand(ElevatorPosition.STACK_STEP_PLACE));
-		SmartDashboard.putData("Automated Human Player Station", new AutomatedHumanPlayerStacking());
-		SmartDashboard.putData("Automated Human Player Station 2", new SequentialCommandGroup(new ElevatorCommand(ElevatorPosition.CARRY), new ElevatorCommand(ElevatorPosition.STACK_THREE_CARRY)));
+		SmartDashboard.putData("Automated Human Player Station", new SequentialCommandGroup(new ElevatorCommand(ElevatorPosition.GROUND), new ElevatorCommand(ElevatorPosition.STACK_THREE_CARRY)));
+		SmartDashboard.putData("Turn Towards Tote", new TurnTowardsTote());
+		SmartDashboard.putData("DriveToTote", new DriveToToteCommand(0.5, 18));
+		SmartDashboard.putData("DriveAtSpeed", new DriveAtSpeed());
+		
 		
 		//Limit Switches
-		LimitSwitch elevatorLimit = new LimitSwitch(ELEVATOR_LIMIT_CHANNEL);
+		LimitSwitch elevatorLimit = new LimitSwitch(ELEVATOR_BOTTOM_LIMIT_CHANNEL);
 		elevatorLimit.whenActive(new ResetElevatorEncoder());
+		elevatorLimit.whenInactive(new ResetElevatorEncoder());
 	}
 	public SelectableCommand getAutoCommand() {
 		return autoSelector.getSelectedCommand();

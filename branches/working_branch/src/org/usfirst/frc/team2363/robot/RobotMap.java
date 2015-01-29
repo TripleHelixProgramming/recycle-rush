@@ -33,12 +33,16 @@ public class RobotMap {
 	public static final int REAR_LEFT_TALON_CHANNEL = 2;
 	public static final int REAR_RIGHT_TALON_CHANNEL = 3;
 	public static final int ELEVATOR_TALON_CHANNEL = 4;
+	public static final int LEFT_ROLLER_GRIPPER_TALON_CHANNEL = 5;
+	public static final int RIGHT_ROLLER_GRIPPER_TALON_CHANNEL = 6;
 	
 	//Solenoids
 	public static final int SHIFT_SOLENOID_1_CHANNEL = 0;
 	public static final int SHIFT_SOLENOID_2_CHANNEL = 1;
 	public static final int INTERNAL_GRIPPER_SOLENOID_CHANNEL = 2;
+	public static final int ROLLER_GRIPPER_SOLENOID_CHANNEL = 4;
 	public static final int BRAKE_SOLENOID_CHANNEL = 7;
+	
 	
 	//Encoders
 	public static final int DRIVETRAIN_LEFT_ENCODER_CHANNEL_A = 0;
@@ -49,7 +53,8 @@ public class RobotMap {
 	public static final int ELEVATOR_ENCODER_CHANNEL_B = 5;
 	
 	//Limit Switches
-	public static final int ELEVATOR_LIMIT_CHANNEL = 6;
+	public static final int ELEVATOR_BOTTOM_LIMIT_CHANNEL = 6;
+	public static final int ELEVATOR_TOP_LIMIT_CHANNEL = 7;
 	
 	//PDP
 	public static final int ELEVATOR_PDP_CHANNEL = 0;

@@ -14,6 +14,7 @@ public class InternalGripper extends Subsystem {
     
     private Solenoid claw = new Solenoid(INTERNAL_GRIPPER_SOLENOID_CHANNEL);
     
+    @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());

@@ -1,22 +1,27 @@
 package org.usfirst.frc.team2363.robot.commands.drivetrain;
 
+import org.usfirst.frc.team2363.robot.subsystems.Drivetrain.ShifterState;
+
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.usfirst.frc.team2363.robot.Robot.drivetrain;
 
 /**
  *
  */
-public class DriveStraightCommand extends PIDCommand {
+public class DriveToDistanceCommand extends PIDCommand {
 		
-    public DriveStraightCommand(double power, int distance) {
-        super(0.0016, 0.00009, 0);
+    public DriveToDistanceCommand(double power, double distance) {
+        super(0.16, 0, 0);
         requires(drivetrain);
         getPIDController().setOutputRange(-power, power);     
-        getPIDController().setAbsoluteTolerance(1);
+        getPIDController().setAbsoluteTolerance(0.5);
+        setSetpoint(distance);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	drivetrain.shift(ShifterState.HIGH);
     	drivetrain.resetEncoders();
     }
 
@@ -41,11 +46,12 @@ public class DriveStraightCommand extends PIDCommand {
 
 	@Override
 	protected double returnPIDInput() {
+		SmartDashboard.putNumber("distanceDriven", (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2);
 		return (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
 	}
 
 	@Override
 	protected void usePIDOutput(double output) {
-		drivetrain.arcadeDrive(output, 0);
+		drivetrain.arcadeDrive(-output, 0);
 	}
 }
