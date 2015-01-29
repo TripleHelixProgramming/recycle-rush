@@ -1,0 +1,142 @@
+package org.usfirst.frc.team2363.robot.util;
+
+import java.util.Comparator;
+import java.util.Vector;
+
+import com.ni.vision.NIVision;
+import com.ni.vision.NIVision.DrawMode;
+import com.ni.vision.NIVision.GetImageSizeResult;
+import com.ni.vision.NIVision.Image;
+import com.ni.vision.NIVision.ImageType;
+import com.ni.vision.NIVision.Rect;
+import com.ni.vision.NIVision.ShapeMode;
+
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+public class VisionProcessor extends Thread {
+
+	private boolean runState = true;
+	private double center;
+
+	private int session;
+
+	//Images
+	private Image frame;
+	private Image binaryFrame;
+
+	//Constants
+	private static final NIVision.Range TOTE_HUE_RANGE = new NIVision.Range(24, 49);	//Default hue range for yellow tote
+	private static final NIVision.Range TOTE_SAT_RANGE = new NIVision.Range(67, 255);	//Default saturation range for yellow tote
+	private static final NIVision.Range TOTE_VAL_RANGE = new NIVision.Range(49, 255);	//Default value range for yellow tote
+	private static final double AREA_MINIMUM = 0.5; //Default Area minimum for particle as a percentage of total image area
+	private static final NIVision.ParticleFilterCriteria2[] CRITERIA = new NIVision.ParticleFilterCriteria2[1];
+	private static final NIVision.ParticleFilterOptions2 FILTER_OPTIONS = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
+
+	public VisionProcessor() {
+		// create images
+		frame = NIVision.imaqCreateImage(ImageType.IMAGE_RGB, 0);
+		binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
+		CRITERIA[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
+
+		session = NIVision.IMAQdxOpenCamera("cam0",
+				NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		NIVision.IMAQdxConfigureGrab(session);
+	}
+
+	public void stopVision() {
+		runState = false;
+		interrupt();
+	}
+
+	public double getCenter() {
+		return center;
+	}
+
+	public void run() {
+		while (runState) {
+			NIVision.IMAQdxGrab(session, frame, 1);
+
+			//Threshold the image looking for yellow (tote color)
+			NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.HSV, TOTE_HUE_RANGE, TOTE_SAT_RANGE, TOTE_VAL_RANGE);
+
+			//Send particle count to dashboard
+			int numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
+
+			//filter out small particles
+			float areaMin = (float)SmartDashboard.getNumber("Area min %", AREA_MINIMUM);
+			CRITERIA[0].lower = areaMin;
+			NIVision.imaqParticleFilter4(binaryFrame, binaryFrame, CRITERIA, FILTER_OPTIONS, null);
+
+			//Send particle count after filtering to dashboard
+			numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
+
+			SmartDashboard.putNumber("Number of Particles", numParticles);
+			if (numParticles > 0) {
+				//Measure particles and sort by particle size
+				Vector<ParticleReport> particles = new Vector<ParticleReport>();
+				for (int particleIndex = 0; particleIndex < numParticles; particleIndex++) {
+					ParticleReport par = new ParticleReport();
+					par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+					par.Area = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+					par.ConvexHullArea = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+					par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+					par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+					par.BoundingRectBottom = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
+					par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+					particles.add(par);
+				}
+				particles.sort(null);
+
+				ParticleReport tote = particles.get(0);
+				center = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2.0;
+				GetImageSizeResult size = NIVision.imaqGetImageSize(frame);
+				center = center - (size.width / 2);
+				
+				SmartDashboard.putNumber("Center of Tote", center);
+				
+				Rect square = new Rect();
+				square.left = (int)tote.BoundingRectLeft;
+				square.top = (int)tote.BoundingRectTop;
+				square.height = (int)(tote.BoundingRectBottom - tote.BoundingRectTop);
+				square.width = (int)(tote.BoundingRectRight - tote.BoundingRectLeft);
+				
+				Rect dot = new Rect();
+				dot.left = (int)((tote.BoundingRectRight + tote.BoundingRectLeft) / 2);
+				dot.top = (int)((tote.BoundingRectTop + tote.BoundingRectBottom) / 2);
+				dot.height = 5;
+				dot.width = 5;
+				
+				NIVision.imaqDrawShapeOnImage(frame, frame, square, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
+				NIVision.imaqDrawShapeOnImage(frame, frame, dot, DrawMode.PAINT_VALUE, ShapeMode.SHAPE_OVAL, 5);
+			} else {
+				center = 0;
+			}
+			
+			CameraServer.getInstance().setImage(frame);
+			Timer.delay(0.005);
+		}
+	}
+
+	//A structure to hold measurements of a particle
+	class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
+		double PercentAreaToImageArea;
+		double Area;
+		double ConvexHullArea;
+		double BoundingRectLeft;
+		double BoundingRectTop;
+		double BoundingRectRight;
+		double BoundingRectBottom;
+
+		public int compareTo(ParticleReport r)
+		{
+			return (int)(r.Area - this.Area);
+		}
+
+		public int compare(ParticleReport r1, ParticleReport r2)
+		{
+			return (int)(r1.Area - r2.Area);
+		}
+	};
+}

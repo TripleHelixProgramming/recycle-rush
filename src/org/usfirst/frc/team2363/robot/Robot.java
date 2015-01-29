@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.AxisCamera;
 
-import org.usfirst.frc.team2363.robot.commands.PDPMonitoringCommand;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
+import org.usfirst.frc.team2363.robot.subsystems.RollerGripper;
+import org.usfirst.frc.team2363.robot.util.VisionProcessor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,16 +32,21 @@ public class Robot extends IterativeRobot {
 	public static PowerDistributionPanel pdp;
 	public static Drivetrain drivetrain;
 	public static Elevator elevator;
+	public static RollerGripper rollerGripper;
 	public static Compressor compressor;
-
+	public static AxisCamera camera;
+	public static VisionProcessor visionProcessor;
     private Command autonomousCommand;
     
     public Robot() {
     	pdp = new PowerDistributionPanel();
     	drivetrain = new Drivetrain();
     	elevator = new Elevator();
+    	rollerGripper = new RollerGripper();
     	compressor = new Compressor();
     	oi = new OI();
+    	visionProcessor = new VisionProcessor();
+//    	camera = new AxisCamera("axis-camera");
     }
 
     /**
@@ -47,7 +54,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-        
+    	visionProcessor.start();
     }
 	
 	public void disabledPeriodic() {

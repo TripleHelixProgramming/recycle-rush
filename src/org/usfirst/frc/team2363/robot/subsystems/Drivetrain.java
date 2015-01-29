@@ -3,7 +3,7 @@ package org.usfirst.frc.team2363.robot.subsystems;
 
 import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
-import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDriveSpeedScaling;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
@@ -21,8 +21,8 @@ public class Drivetrain extends Subsystem {
 		LOW;
 	}
 	//Encoders
-	private Encoder leftEncoder = new Encoder(DRIVETRAIN_LEFT_ENCODER_CHANNEL_A, DRIVETRAIN_LEFT_ENCODER_CHANNEL_B, false, EncodingType.k4X);
-	private Encoder rightEncoder = new Encoder(DRIVETRAIN_RIGHT_ENCODER_CHANNEL_A, DRIVETRAIN_RIGHT_ENCODER_CHANNEL_B, false, EncodingType.k4X);
+	private Encoder leftEncoder = new Encoder(DRIVETRAIN_LEFT_ENCODER_CHANNEL_A, DRIVETRAIN_LEFT_ENCODER_CHANNEL_B, true, EncodingType.k4X);
+	private Encoder rightEncoder = new Encoder(DRIVETRAIN_RIGHT_ENCODER_CHANNEL_A, DRIVETRAIN_RIGHT_ENCODER_CHANNEL_B, true, EncodingType.k4X);
 
 	//Motor Controllers
     private SpeedController frontLeft = new Talon(FRONT_LEFT_TALON_CHANNEL);
@@ -35,9 +35,18 @@ public class Drivetrain extends Subsystem {
     private Solenoid shiftSolenoid2 = new Solenoid(SHIFT_SOLENOID_2_CHANNEL);
     
     private RobotDrive robotDrive = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
+    
+    public Drivetrain() {
+    	leftEncoder.setDistancePerPulse(0.01636);
+    	leftEncoder.setSamplesToAverage(12);
+    	
+    	rightEncoder.setDistancePerPulse(0.01636);
+    	rightEncoder.setSamplesToAverage(12);
+    }
 
+    @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new JoystickDriveSpeedScaling());
+        setDefaultCommand(new JoystickDrive());
     }
     
     public void arcadeDrive(double throttle, double turn) {
@@ -53,11 +62,11 @@ public class Drivetrain extends Subsystem {
     }
     
     public double getLeftSpeed() {
-    	return leftEncoder.getRate();
+    	return leftEncoder.getRate() / 4;
     }
     
     public double getRightSpeed() {
-    	return rightEncoder.getRate();
+    	return rightEncoder.getRate() / 4;
     }
     
     public void resetEncoders() {
@@ -65,17 +74,12 @@ public class Drivetrain extends Subsystem {
     	leftEncoder.reset();
     }
     public void shift(ShifterState newState) {
-    	switch (newState) {
-    		case HIGH:
-    			shiftSolenoid1.set(true);
-    			shiftSolenoid2.set(false);
-    			break;
-    		case LOW:
-    			shiftSolenoid1.set(false);
-    			shiftSolenoid2.set(true);
-    			break;
-    		default:
-    			break;
+    	if (newState == ShifterState.HIGH) {
+    		shiftSolenoid1.set(false);
+    		shiftSolenoid2.set(true);
+    	} else {
+    		shiftSolenoid1.set(true);
+    		shiftSolenoid2.set(false);
     	}
     }
     
