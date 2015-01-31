@@ -26,7 +26,7 @@ public class Elevator extends Subsystem {
 		STEP_PLACE("Step Placement", 9.5),
 		STACK_TWO_CARRY("Stack of Two Carry", 17.5),
 		STACK_TWO_PLACE("Stack of Two Placement", 15.5),
-		STACK_THREE_CARRY("Stack of Three Carry", 27.5),
+		STACK_THREE_CARRY("Stack of Three Carry", 27),
 		STACK_STEP_CARRY("Stack of Three Carry, For Step", 22.5),
 		STACK_STEP_PLACE("Stack of Three Place, For Step", 20.5);
 		

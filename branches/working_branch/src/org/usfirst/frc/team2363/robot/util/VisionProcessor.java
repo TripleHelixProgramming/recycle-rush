@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2363.robot.util;
 
+import java.awt.Point;
 import java.util.Comparator;
 import java.util.Vector;
 
@@ -27,9 +28,9 @@ public class VisionProcessor extends Thread {
 	private Image binaryFrame;
 
 	//Constants
-	private static final NIVision.Range TOTE_HUE_RANGE = new NIVision.Range(24, 49);	//Default hue range for yellow tote
-	private static final NIVision.Range TOTE_SAT_RANGE = new NIVision.Range(67, 255);	//Default saturation range for yellow tote
-	private static final NIVision.Range TOTE_VAL_RANGE = new NIVision.Range(49, 255);	//Default value range for yellow tote
+	private static final NIVision.Range R_RANGE = new NIVision.Range(175, 230);	//Default hue range for yellow tote
+	private static final NIVision.Range G_RANGE = new NIVision.Range(140, 200);	//Default saturation range for yellow tote
+	private static final NIVision.Range B_RANGE = new NIVision.Range(50, 105);	//Default value range for yellow tote
 	private static final double AREA_MINIMUM = 0.5; //Default Area minimum for particle as a percentage of total image area
 	private static final NIVision.ParticleFilterCriteria2[] CRITERIA = new NIVision.ParticleFilterCriteria2[1];
 	private static final NIVision.ParticleFilterOptions2 FILTER_OPTIONS = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
@@ -40,7 +41,7 @@ public class VisionProcessor extends Thread {
 		binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
 		CRITERIA[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 
-		session = NIVision.IMAQdxOpenCamera("cam0",
+		session = NIVision.IMAQdxOpenCamera("cam1",
 				NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(session);
 	}
@@ -57,9 +58,10 @@ public class VisionProcessor extends Thread {
 	public void run() {
 		while (runState) {
 			NIVision.IMAQdxGrab(session, frame, 1);
+			GetImageSizeResult size = NIVision.imaqGetImageSize(frame);
 
 			//Threshold the image looking for yellow (tote color)
-			NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.HSV, TOTE_HUE_RANGE, TOTE_SAT_RANGE, TOTE_VAL_RANGE);
+			NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.RGB, R_RANGE, G_RANGE, B_RANGE);
 
 			//Send particle count to dashboard
 			int numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
@@ -91,7 +93,6 @@ public class VisionProcessor extends Thread {
 
 				ParticleReport tote = particles.get(0);
 				center = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2.0;
-				GetImageSizeResult size = NIVision.imaqGetImageSize(frame);
 				center = center - (size.width / 2);
 				
 				SmartDashboard.putNumber("Center of Tote", center);
@@ -113,6 +114,10 @@ public class VisionProcessor extends Thread {
 			} else {
 				center = 0;
 			}
+			
+			NIVision.Point topCenter = new NIVision.Point(size.width / 2, 0);
+			NIVision.Point bottomCenter = new NIVision.Point(size.width / 2, size.height - 1);
+			NIVision.imaqDrawLineOnImage(frame, frame, DrawMode.DRAW_VALUE, topCenter, bottomCenter, 255);
 			
 			CameraServer.getInstance().setImage(frame);
 			Timer.delay(0.005);

@@ -5,13 +5,17 @@ import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 
+import com.kauailabs.nav6.frc.IMU;
+
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain extends Subsystem {
@@ -24,6 +28,9 @@ public class Drivetrain extends Subsystem {
 	private Encoder leftEncoder = new Encoder(DRIVETRAIN_LEFT_ENCODER_CHANNEL_A, DRIVETRAIN_LEFT_ENCODER_CHANNEL_B, true, EncodingType.k4X);
 	private Encoder rightEncoder = new Encoder(DRIVETRAIN_RIGHT_ENCODER_CHANNEL_A, DRIVETRAIN_RIGHT_ENCODER_CHANNEL_B, true, EncodingType.k4X);
 
+	//IMU
+	IMU imu;
+	
 	//Motor Controllers
     private SpeedController frontLeft = new Talon(FRONT_LEFT_TALON_CHANNEL);
     private SpeedController frontRight = new Talon(FRONT_RIGHT_TALON_CHANNEL);
@@ -42,6 +49,26 @@ public class Drivetrain extends Subsystem {
     	
     	rightEncoder.setDistancePerPulse(0.01636);
     	rightEncoder.setSamplesToAverage(12);
+    	
+    	SerialPort serialPort;
+
+    	try {
+    		serialPort = new SerialPort(57600, SerialPort.Port.kMXP);
+
+    		// You can add a second parameter to modify the 
+    		// update rate (in hz) from 4 to 100.  The default is 100.
+    		// If you need to minimize CPU load, you can set it to a
+    		// lower value, as shown here, depending upon your needs.
+
+    		// You can also use the IMUAdvanced class for advanced
+    		// features.
+
+    		byte updateRateHz = 50;
+    		imu = new IMU(serialPort, updateRateHz);
+    		SmartDashboard.putData(imu);
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
     }
 
     @Override
@@ -62,11 +89,11 @@ public class Drivetrain extends Subsystem {
     }
     
     public double getLeftSpeed() {
-    	return leftEncoder.getRate() / 4;
+    	return leftEncoder.getRate();
     }
     
     public double getRightSpeed() {
-    	return rightEncoder.getRate() / 4;
+    	return rightEncoder.getRate();
     }
     
     public void resetEncoders() {
@@ -83,4 +110,10 @@ public class Drivetrain extends Subsystem {
     	}
     }
     
+    public double getHeading() {
+    	if (!imu.isCalibrating()) {
+    		return imu.getCompassHeading();
+    	}
+    	return 0;
+    }
 }

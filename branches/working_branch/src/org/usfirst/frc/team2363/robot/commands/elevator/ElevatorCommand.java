@@ -41,7 +41,7 @@ public class ElevatorCommand extends PIDCommand {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return getPIDController().onTarget() || elevator.isAtTopLimit();
+        return getPIDController().onTarget(); // || elevator.isAtTopLimit();
     }
 
     // Called once after isFinished returns true
