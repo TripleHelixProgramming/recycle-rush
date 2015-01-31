@@ -8,6 +8,7 @@ public class RobotMap {
 	public static final double ELEVATOR_DISTANCE_PER_PULSE = 0.0111875510;
 	public static final int ELEVATOR_MOTOR_MAX_CURRENT = 70;
 	public static final double ROBOT_TOP_SPEED = 11;
+	public static final double ROLLER_POWER = -1;
 	
 	//Joysticks
 	public static final int PS4_PORT = 0;
@@ -40,7 +41,8 @@ public class RobotMap {
 	public static final int SHIFT_SOLENOID_1_CHANNEL = 0;
 	public static final int SHIFT_SOLENOID_2_CHANNEL = 1;
 	public static final int INTERNAL_GRIPPER_SOLENOID_CHANNEL = 2;
-	public static final int ROLLER_GRIPPER_SOLENOID_CHANNEL = 4;
+	public static final int EXTEND_ROLLER_GRIPPER_SOLENOID_CHANNEL = 5;
+	public static final int RETRACT_ROLLER_GRIPPER_SOLENOID_CHANNEL = 6;
 	public static final int BRAKE_SOLENOID_CHANNEL = 7;
 	
 	
@@ -55,6 +57,7 @@ public class RobotMap {
 	//Limit Switches
 	public static final int ELEVATOR_BOTTOM_LIMIT_CHANNEL = 6;
 	public static final int ELEVATOR_TOP_LIMIT_CHANNEL = 7;
+	public static final int ROLLER_STOP_LIMIT_CHANNEL = 8;
 	
 	//PDP
 	public static final int ELEVATOR_PDP_CHANNEL = 0;

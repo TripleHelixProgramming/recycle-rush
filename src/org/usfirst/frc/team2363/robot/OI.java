@@ -4,15 +4,22 @@ import static org.usfirst.frc.team2363.robot.RobotMap.*;
 import static org.usfirst.frc.team2363.robot.subsystems.Drivetrain.ShifterState.*;
 
 import org.usfirst.frc.team2363.robot.commands.SequentialCommandGroup;
+import org.usfirst.frc.team2363.robot.commands.autonomous.TotesAndCansCommand;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.DriveAtSpeed;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.DriveAtSpeedToTote;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.DriveToToteCommand;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.ShiftCommand;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.TurnTowardsTote;
+import org.usfirst.frc.team2363.robot.commands.elevator.AutomatedHPThing;
 import org.usfirst.frc.team2363.robot.commands.elevator.ElevatorCommand;
+import org.usfirst.frc.team2363.robot.commands.elevator.GoToGround;
+import org.usfirst.frc.team2363.robot.commands.elevator.GoToPosition;
 import org.usfirst.frc.team2363.robot.commands.elevator.ResetElevatorEncoder;
+import org.usfirst.frc.team2363.robot.commands.grippers.RollerGripperCommand;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.ElevatorPosition;
 import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
+import org.usfirst.frc.team2363.robot.util.ClawPosition;
 import org.usfirst.frc.team2363.robot.util.LimitSwitch;
 import org.usfirst.frc.team2363.robot.util.RollingAverager;
 import org.usfirst.frc.team2363.robot.util.SelectableCommand;
@@ -74,7 +81,16 @@ public class OI {
 		SmartDashboard.putData("Turn Towards Tote", new TurnTowardsTote());
 		SmartDashboard.putData("DriveToTote", new DriveToToteCommand(0.5, 18));
 		SmartDashboard.putData("DriveAtSpeed", new DriveAtSpeed());
-		
+		SmartDashboard.putData("DriveToToteAtSpeed", new DriveAtSpeedToTote(48, 0.4, 60));
+		SmartDashboard.putData(new TotesAndCansCommand());
+		SmartDashboard.putData("Roller On + Gripping", new RollerGripperCommand(RobotMap.ROLLER_POWER, ClawPosition.CLOSE));
+		SmartDashboard.putData("Roller Off + Gripping", new RollerGripperCommand(0, ClawPosition.CLOSE));
+		SmartDashboard.putData("Roller On + Ejecting", new RollerGripperCommand(-RobotMap.ROLLER_POWER, ClawPosition.CLOSE));
+		SmartDashboard.putData("Roller Off + Out", new RollerGripperCommand(0, ClawPosition.OPEN));
+		SmartDashboard.putData("Roller On + Out", new RollerGripperCommand(RobotMap.ROLLER_POWER, ClawPosition.OPEN));
+		SmartDashboard.putData("Automated HP part 1, Ground", new GoToGround());
+		SmartDashboard.putData("Automated HP part 2, Up", new GoToPosition(ElevatorPosition.STACK_THREE_CARRY));
+		SmartDashboard.putData("Automated HP Thing", new AutomatedHPThing());
 		
 		//Limit Switches
 		LimitSwitch elevatorLimit = new LimitSwitch(ELEVATOR_BOTTOM_LIMIT_CHANNEL);
