@@ -6,11 +6,11 @@ public class TimedPrinter {
 
 	private int waitTime;
 	private Date lastTime = new Date(0);
-	
+
 	public TimedPrinter(int waitTime) {
 		this.waitTime = waitTime;
 	}
-	
+
 	public void print(String value) {
 		Date now = new Date();
 		long timePassed = now.getTime() - lastTime.getTime();
@@ -19,7 +19,7 @@ public class TimedPrinter {
 			lastTime = now;
 		}
 	}
-	
+
 	public void print(double value) {
 		print("" + value);
 	}

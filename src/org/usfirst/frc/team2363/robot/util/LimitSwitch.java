@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.buttons.Trigger;
 
 public class LimitSwitch extends Trigger {
 	private DigitalInput dio;
-	
+
 	public LimitSwitch(int channel) {
 		dio = new DigitalInput(channel);
 	}

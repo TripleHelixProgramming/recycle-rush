@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PropertyReader {
-	
+
 	private static Map<String, Integer> propertyMap = new HashMap<>();
-	
+
 	public static void loadProperties(String fileName) {
 		Path path = FileSystems.getDefault().getPath("properties", fileName);
 		System.out.println("Loading property file from: " + path.toString());
@@ -29,7 +29,7 @@ public class PropertyReader {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static int getProperty(String name, int defaultValue) {
 		Integer value = propertyMap.get(name);
 		if (value != null) {

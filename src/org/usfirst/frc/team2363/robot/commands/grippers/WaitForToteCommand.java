@@ -1,51 +1,38 @@
 package org.usfirst.frc.team2363.robot.commands.grippers;
 
-import org.usfirst.frc.team2363.robot.util.ClawPosition;
+import org.usfirst.frc.team2363.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import static org.usfirst.frc.team2363.robot.Robot.rollerGripper;
+
 /**
  *
  */
-public class RollerGripperCommand extends Command {
+public class WaitForToteCommand extends Command {
 
-	private double power;
-	private ClawPosition position;
-
-	public RollerGripperCommand(double power, ClawPosition position) {
-		this.power = power;
-		this.position = position;
-		requires(rollerGripper);
+	public WaitForToteCommand() {
+		// Use requires() here to declare subsystem dependencies
+		// eg. requires(chassis);
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		rollerGripper.setGripper(position);
-
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-//		if (rollerGripper.isToteIn()) {
-//			rollerGripper.setRollerPower(0);
-//		} else {
-			rollerGripper.setRollerPower(power);
-//		}
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return false;
+		return Robot.rollerGripper.isToteIn();
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
-		rollerGripper.setRollerPower(0);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		rollerGripper.setRollerPower(0);
 	}
 }
