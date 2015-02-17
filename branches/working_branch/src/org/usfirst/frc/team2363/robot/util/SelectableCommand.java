@@ -5,5 +5,5 @@ import edu.wpi.first.wpilibj.command.Command;
 public abstract class SelectableCommand extends Command {
 
 	public abstract String getName();
-	
+
 }

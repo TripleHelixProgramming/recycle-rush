@@ -7,12 +7,12 @@ import static org.usfirst.frc.team2363.robot.Robot.rollerGripper;
 /**
  *
  */
-public class RollerGripperCommand extends Command {
+public class FinishingRollerGripperCommand extends Command {
 
 	private double power;
 	private ClawPosition position;
 
-	public RollerGripperCommand(double power, ClawPosition position) {
+	public FinishingRollerGripperCommand(double power, ClawPosition position) {
 		this.power = power;
 		this.position = position;
 		requires(rollerGripper);
@@ -26,16 +26,12 @@ public class RollerGripperCommand extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-//		if (rollerGripper.isToteIn()) {
-//			rollerGripper.setRollerPower(0);
-//		} else {
-			rollerGripper.setRollerPower(power);
-//		}
+		rollerGripper.setRollerPower(power);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	// Called once after isFinished returns true
