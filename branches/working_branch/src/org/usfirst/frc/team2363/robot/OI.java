@@ -22,15 +22,20 @@ import org.usfirst.frc.team2363.robot.commands.elevator.ToteElevatorCommand;
 import org.usfirst.frc.team2363.robot.commands.elevator.GoToGround;
 import org.usfirst.frc.team2363.robot.commands.elevator.GoToPosition;
 import org.usfirst.frc.team2363.robot.commands.elevator.SimpleBearHuggerElevatorCommand;
+import org.usfirst.frc.team2363.robot.commands.elevator.UpAndOpen;
 import org.usfirst.frc.team2363.robot.commands.grippers.ActuateDocOcGripper;
 import org.usfirst.frc.team2363.robot.commands.grippers.BearHuggerGripperCommand;
+import org.usfirst.frc.team2363.robot.commands.grippers.CanTiltCommand;
+import org.usfirst.frc.team2363.robot.commands.grippers.DocOcArmYawCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.ElevateDocOcArmToCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.ElevateDocOcGripper;
 import org.usfirst.frc.team2363.robot.commands.grippers.FromFloorToBearHugger;
 import org.usfirst.frc.team2363.robot.commands.grippers.RollerGripperCommand;
+import org.usfirst.frc.team2363.robot.commands.grippers.RotateArmToOnboard;
 import org.usfirst.frc.team2363.robot.commands.grippers.RotateDocOcArmToCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.SimpleDocOcArmElevationCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.SimpleDocOcArmYawCommand;
+import org.usfirst.frc.team2363.robot.subsystems.BearHugger.TiltPosition;
 import org.usfirst.frc.team2363.robot.subsystems.BearHuggerElevator;
 import org.usfirst.frc.team2363.robot.subsystems.DocOcArm.DocOcArmPosition;
 import org.usfirst.frc.team2363.robot.subsystems.ToteElevator.ElevatorPosition;
@@ -85,7 +90,8 @@ public class OI {
 		twoToteButton.whenPressed(new ElevateToteCommand(ElevatorPosition.TWO_TOTE_CARRY));
 		twoToteButton.whenReleased(new ElevateToteCommand(ElevatorPosition.TWO_TOTE_PLACE));
 
-		humanPlayerButton.whenPressed(new AutomatedHPThing());
+		humanPlayerButton.whenPressed(new UpAndOpen());
+		humanPlayerButton.whenReleased(new AutomatedHPThing());
 
 		//Joystick Buttons
 		JoystickButton throttleScalingButton = new JoystickButton(ps4Controller, THROTTLE_SCALING_BUTTON);
@@ -133,9 +139,11 @@ public class OI {
 		SmartDashboard.putData("Arm To Floor", new ElevateDocOcArmToCommand(Robot.leftDocOcArm, DocOcArmPosition.LEFT_FLOOR, 12));
 //		SmartDashboard.putData("Arm To Step", new ElevateDocOcArmToCommand(Robot.leftDocOcArm, DocOcArmPosition.LEFT_STEP, 12));
 		SmartDashboard.putData("Arm To Stow", new ElevateDocOcArmToCommand(Robot.leftDocOcArm, DocOcArmPosition.LEFT_STOWED, 12));
-		SmartDashboard.putData("Rotate Arm To Stow", new RotateDocOcArmToCommand(Robot.leftDocOcArm, DocOcArmPosition.LEFT_STOWED, 5));
-		SmartDashboard.putData("Rotate Arm To Floor", new RotateDocOcArmToCommand(Robot.leftDocOcArm, DocOcArmPosition.LEFT_FLOOR, 5));
+		SmartDashboard.putData("Rotate Arm To Stow", new DocOcArmYawCommand(0.1, DocOcArmPosition.LEFT_STOWED));
+		SmartDashboard.putData("Rotate Arm To Floor", new DocOcArmYawCommand(0.1, DocOcArmPosition.LEFT_FLOOR));
 		SmartDashboard.putData(new FromFloorToBearHugger());
+		SmartDashboard.putData("Tilt Can", new CanTiltCommand(TiltPosition.TILT));
+		SmartDashboard.putData("Un-Tilt Can", new CanTiltCommand(TiltPosition.UNTILT));
 	}
 	
 	public SelectableCommand getAutoCommand() {

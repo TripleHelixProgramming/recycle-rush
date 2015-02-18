@@ -7,6 +7,7 @@ import org.usfirst.frc.team2363.robot.commands.grippers.BearHuggerGripperCommand
 import org.usfirst.frc.team2363.robot.commands.grippers.FinishingRollerGripperCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.RollerGripperCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.WaitForToteCommand;
+import org.usfirst.frc.team2363.robot.subsystems.ToteElevator.BrakePosition;
 import org.usfirst.frc.team2363.robot.subsystems.ToteElevator.ElevatorPosition;
 import org.usfirst.frc.team2363.robot.util.ClawPosition;
 
@@ -23,13 +24,17 @@ public class AutomatedHPThing extends CommandGroup {
 		addSequential(new WaitForToteCommand());
 		addParallel(new RollerGripperCommand(0, ClawPosition.CLOSE));
 		addSequential(new ElevateAtSpeed(ElevatorPosition.GROUND));
-		addParallel(new AdjustBearHuggerCommand());
+//		addParallel(new AdjustBearHuggerCommand());
 		addSequential(new ElevateAtSpeed(ElevatorPosition.TWO_TOTE_CARRY));
-		addSequential(new FinishingRollerGripperCommand(0, ClawPosition.OPEN));
-		addSequential(new BearHuggerGripperCommand(ClawPosition.CLOSE));
+		addParallel(new FinishingRollerGripperCommand(0, ClawPosition.OPEN));
+		addParallel(new BearHuggerGripperCommand(ClawPosition.CLOSE));
 	}
 	
 	public boolean isFinished() {
 		return super.isFinished() || Robot.bearHuggerElevator.isAtTopLimit();
+	}
+	
+	public void end() {
+		Robot.toteElevator.setBrake(BrakePosition.ENGAGED);
 	}
 }
