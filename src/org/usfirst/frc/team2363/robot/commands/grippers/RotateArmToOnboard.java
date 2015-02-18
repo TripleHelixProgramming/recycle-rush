@@ -1,20 +1,29 @@
 package org.usfirst.frc.team2363.robot.commands.grippers;
 
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.command.PIDCommand;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.usfirst.frc.team2363.robot.Robot.leftDocOcArm;
 /**
  *
  */
 public class RotateArmToOnboard extends PIDCommand {
 private double position;
-    public RotateArmToOnboard(double position) {
-    	super(0, 0, 0);
+
+    public RotateArmToOnboard(double position, double maxPower) {
+    	super(0.002, 0, 0);
         this.position = position;
+        this.getPIDController().setOutputRange(-maxPower, maxPower);
+        getPIDController().setAbsoluteTolerance(5);
+    }
+    
+    public RotateArmToOnboard(double position) {
+    	this(position, 0.3);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	leftDocOcArm.setYawControlMethod(ControlMode.PercentVbus);
     	this.setSetpoint(position);
     }
 
@@ -29,25 +38,25 @@ private double position;
 
     // Called once after isFinished returns true
     protected void end() {
-    	leftDocOcArm.setYawSpeed(0);
+    	leftDocOcArm.setYaw(0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	leftDocOcArm.setYawSpeed(0);
+    	leftDocOcArm.setYaw(0);
     }
 
 	@Override
 	protected double returnPIDInput() {
-		// TODO Auto-generated method stub
 		return leftDocOcArm.getYawPosition();
 	}
 
 	@Override
 	protected void usePIDOutput(double output) {
-		leftDocOcArm.setYawSpeed(output);
-		// TODO Auto-generated method stub
+		SmartDashboard.putNumber("Yaw Power", output);
+		SmartDashboard.putNumber("Yaw Error", this.getPIDController().getError());
+		leftDocOcArm.setYaw(output);
 		
 	}
 }

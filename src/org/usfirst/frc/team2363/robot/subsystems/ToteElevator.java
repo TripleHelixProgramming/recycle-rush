@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
 import org.usfirst.frc.team2363.robot.Robot;
+import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.commands.elevator.ElevateManually;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -26,7 +27,7 @@ public class ToteElevator extends Subsystem {
 		STEP_PLACE("Place on Step", 8.2),
 		ONE_TOTE_CARRY("Carry for one tote", 17.5),
 		ONE_TOTE_PLACE("Place on one tote", 15.5),
-		TWO_TOTE_CARRY("Carry for two totes", 27),
+		TWO_TOTE_CARRY("Carry for two totes", 28.5),
 		TWO_TOTE_PLACE("Place on two totes", 24);
 
 		private String displayName;
@@ -78,8 +79,9 @@ public class ToteElevator extends Subsystem {
 		return encoder.getDistance();
 	}
 
-	public double getElevatorCurrent() {
-		return Math.max(Robot.pdp.getCurrent(ELEVATOR_PDP_CHANNEL_A), Robot.pdp.getCurrent(ELEVATOR_PDP_CHANNEL_B));
+	public boolean aboveWorkingCurrent() {
+		return Robot.pdp.getCurrent(ELEVATOR_PDP_CHANNEL_A) > RobotMap.TOTE_ELEVATOR_MOTOR_MAX_CURRENT
+				|| Robot.pdp.getCurrent(ELEVATOR_PDP_CHANNEL_B) > RobotMap.TOTE_ELEVATOR_MOTOR_MAX_CURRENT;
 	}
 	
 	public void resetAtTop() {

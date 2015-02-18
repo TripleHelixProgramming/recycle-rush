@@ -1,47 +1,44 @@
-package org.usfirst.frc.team2363.robot.commands.grippers;
+package org.usfirst.frc.team2363.robot.commands.elevator;
 
 import org.usfirst.frc.team2363.robot.Robot;
+import org.usfirst.frc.team2363.robot.subsystems.BearHugger.TiltPosition;
 
-import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
-import static org.usfirst.frc.team2363.robot.Robot.leftDocOcArm;
 
 /**
  *
  */
-public class SimpleDocOcArmYawCommand extends Command {
+public class HomeBearHugger extends Command {
 
-	private double power;
-   
-	public SimpleDocOcArmYawCommand(double power) {
-        this.power = power;
-        requires(Robot.leftDocOcArm);
+    public HomeBearHugger() {
+        requires(Robot.bearHuggerElevator);
+        setTimeout(1.5);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	leftDocOcArm.setYawControlMethod(ControlMode.PercentVbus);
+    	Robot.bearHugger.tilt(TiltPosition.UNTILT);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	leftDocOcArm.setYaw(power);
-    	System.out.println("Rotate Arm");
+    	Robot.bearHuggerElevator.drive(-0.75);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	leftDocOcArm.setYaw(0);
+    	Robot.bearHuggerElevator.drive(0);
+    	Robot.bearHuggerElevator.resetAtBottom();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	leftDocOcArm.setYaw(0);
+    	Robot.bearHuggerElevator.drive(0);
     }
 }

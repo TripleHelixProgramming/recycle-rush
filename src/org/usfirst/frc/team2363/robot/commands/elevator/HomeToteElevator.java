@@ -34,6 +34,7 @@ public class HomeToteElevator extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.toteElevator.setPower(0);
+    	Robot.toteElevator.resetAtBottom();
     }
 
     // Called when another command which requires one or more of the same

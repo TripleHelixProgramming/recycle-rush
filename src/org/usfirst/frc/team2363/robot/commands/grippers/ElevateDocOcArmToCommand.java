@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2363.robot.commands.grippers;
 
+import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.subsystems.DocOcArm;
 import org.usfirst.frc.team2363.robot.subsystems.DocOcArm.DocOcArmPosition;
 
@@ -25,7 +26,7 @@ public class ElevateDocOcArmToCommand extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		arm.setControlMethod(ControlMode.Speed);
+		arm.setElevationControlMethod(ControlMode.Speed);
 		arm.setControlEnabled(true);
 	}
 
@@ -49,14 +50,14 @@ public class ElevateDocOcArmToCommand extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-//		arm.setControlMethod(ControlMode.PercentVbus);
+		arm.setElevationControlMethod(ControlMode.PercentVbus);
 		arm.setElevationSpeed(0);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-//		arm.setControlMethod(ControlMode.PercentVbus);
+		arm.setElevationControlMethod(ControlMode.PercentVbus);
 		arm.setElevationSpeed(0);
 	}
 }

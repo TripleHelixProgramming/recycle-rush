@@ -25,7 +25,7 @@ public class RotateDocOcArmToCommand extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		arm.setControlMethod(ControlMode.Speed);
+		arm.setYawControlMethod(ControlMode.Speed);
 		arm.setControlEnabled(true);
 	}
 
@@ -34,11 +34,11 @@ public class RotateDocOcArmToCommand extends Command {
 		double distanceTo = position.getYaw() - arm.getYawPosition();
 		double distanceScalar = distanceTo * P;
 		if (distanceScalar > maxSpeed) {
-			arm.setYawSpeed(maxSpeed);
+			arm.setYaw(maxSpeed);
 		} else if (distanceScalar < -maxSpeed) {
-			arm.setYawSpeed(-maxSpeed);
+			arm.setYaw(-maxSpeed);
 		} else {
-			arm.setYawSpeed(distanceScalar);
+			arm.setYaw(distanceScalar);
 		}
 	}
 
@@ -49,14 +49,14 @@ public class RotateDocOcArmToCommand extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-		arm.setYawSpeed(0);
+		arm.setYaw(0);
 //		arm.setControlEnabled(false);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		arm.setYawSpeed(0);
+		arm.setYaw(0);
 //		arm.setControlEnabled(false);
 	}
 }

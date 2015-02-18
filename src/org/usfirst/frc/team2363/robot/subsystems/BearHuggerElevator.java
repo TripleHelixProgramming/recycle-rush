@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class BearHuggerElevator extends Subsystem {
 	
-	public static final double CAN_HAND_OFF = 6;
+	public static final double CAN_HAND_OFF = 3;
     
     private SpeedController elevator = new Talon(BEAR_HUGGER_ELEVATOR_TALON_CHANNEL);
     private Encoder encoder = new Encoder(BEAR_HUGGER_ELEVATOR_CHANNEL_A, BEAR_HUGGER_ELEVATOR_CHANNEL_B, true, EncodingType.k4X);
@@ -25,6 +25,8 @@ public class BearHuggerElevator extends Subsystem {
     public BearHuggerElevator() {
     	encoder.setDistancePerPulse(BEAR_HUGGER_ELEVATOR_DISTANCE_PER_PULSE);
 		encoder.setPIDSourceParameter(PIDSourceParameter.kDistance);
+		
+		encoder.setMaxPeriod(0.1);
     }
     
     public void initDefaultCommand() {
@@ -44,11 +46,15 @@ public class BearHuggerElevator extends Subsystem {
     }
 
 	public boolean isBetweenAdjustHeights() {
-		return encoder.getDistance() < 10;
+		return encoder.getDistance() > 1 && encoder.getDistance() < 4;
 	}
 
 	public boolean isElevatorMoving() {
 		return !encoder.getStopped();
+	}
+
+	public void resetAtBottom() {
+		encoder.reset();
 	}
 }
 

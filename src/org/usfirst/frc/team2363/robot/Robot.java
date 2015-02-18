@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team2363.robot.commands.elevator.HomeBearHugger;
+import org.usfirst.frc.team2363.robot.commands.elevator.HomeToteElevator;
 import org.usfirst.frc.team2363.robot.subsystems.BearHugger;
 import org.usfirst.frc.team2363.robot.subsystems.BearHuggerElevator;
 import org.usfirst.frc.team2363.robot.subsystems.DocOcArm;
@@ -103,7 +105,8 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit() {
 		if (autonomousCommand != null) autonomousCommand.cancel();
-		//        new PDPMonitoringCommand().start();
+		new HomeToteElevator().start();
+		new HomeBearHugger().start();
 	}
 
 	/**
@@ -132,6 +135,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Doc Oc Arm Yaw Speed", leftDocOcArm.getYawSpeed());
 		
 		SmartDashboard.putBoolean("At Bottom", toteElevator.isAtBottomLimit());
+		
+		SmartDashboard.putNumber("Elevator Motor 1 Current", pdp.getCurrent(2));
+		SmartDashboard.putNumber("Elevator Motor 2 Current", pdp.getCurrent(3));
 	}
 
 	/**

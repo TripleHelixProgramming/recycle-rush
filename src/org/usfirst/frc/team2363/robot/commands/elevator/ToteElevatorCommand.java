@@ -33,12 +33,6 @@ public class ToteElevatorCommand extends PIDCommand {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		double current = toteElevator.getElevatorCurrent();
-		if (current > RobotMap.TOTE_ELEVATOR_MOTOR_MAX_CURRENT) {
-			toteElevator.setPower(0);
-			cancel();
-		}
-		
 		if (toteElevator.isAtBottomLimit()) {
 			toteElevator.resetAtBottom();
 		} 
@@ -46,7 +40,8 @@ public class ToteElevatorCommand extends PIDCommand {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return getPIDController().onTarget(); // || elevator.isAtTopLimit();
+		return getPIDController().onTarget()
+				|| toteElevator.aboveWorkingCurrent();
 	}
 
 	// Called once after isFinished returns true

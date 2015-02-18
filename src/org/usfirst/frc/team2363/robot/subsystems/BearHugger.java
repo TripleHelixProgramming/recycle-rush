@@ -5,7 +5,6 @@ import static org.usfirst.frc.team2363.robot.RobotMap.*;
 import org.usfirst.frc.team2363.robot.util.ClawPosition;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -19,7 +18,7 @@ public class BearHugger extends Subsystem {
 	}
 
 	private DoubleSolenoid claw = new DoubleSolenoid(1, BEAR_HUGGER_OPEN_CHANNEL, BEAR_HUGGER_CLOSE_CHANNEL);
-	private DoubleSolenoid tilt = new DoubleSolenoid(1, BEAR_HUGGER_TILT_CHANNEL, BEAR_HUGGER_UNTILT_CHANNEL);
+	private DoubleSolenoid tilt = new DoubleSolenoid(BEAR_HUGGER_TILT_CHANNEL, BEAR_HUGGER_UNTILT_CHANNEL);
 
 	@Override
 	public void initDefaultCommand() {

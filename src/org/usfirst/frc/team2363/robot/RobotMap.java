@@ -10,7 +10,7 @@ public class RobotMap {
 	public static final int TOTE_ELEVATOR_MOTOR_MAX_CURRENT = 70;
 	public static final double ROBOT_TOP_SPEED = 11;
 	public static final double ROLLER_POWER = -1;
-	public static final double BEAR_HUGGER_ELEVATOR_TOP_LIMIT = 28;
+	public static final double BEAR_HUGGER_ELEVATOR_TOP_LIMIT = 29;
 
 	//Joysticks
 	public static final int PS4_PORT = 0;

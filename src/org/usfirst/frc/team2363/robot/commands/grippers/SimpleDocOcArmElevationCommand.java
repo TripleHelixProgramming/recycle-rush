@@ -20,7 +20,7 @@ public class SimpleDocOcArmElevationCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	leftDocOcArm.setControlMethod(ControlMode.PercentVbus);
+    	leftDocOcArm.setElevationControlMethod(ControlMode.PercentVbus);
 //    	leftDocOcArm.setControlEnabled(false);
     }
 
