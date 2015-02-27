@@ -10,7 +10,7 @@ import static org.usfirst.frc.team2363.robot.Robot.drivetrain;
 public class DriveAtSpeed extends PIDCommand {
 	
     public DriveAtSpeed() {
-    	super(0, 0.003, 0);
+    	super(" Drive at a speed", 0, 0.003, 0);
     	requires(drivetrain);
     }
 

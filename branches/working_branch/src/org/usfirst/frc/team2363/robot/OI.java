@@ -3,6 +3,9 @@ package org.usfirst.frc.team2363.robot;
 import static org.usfirst.frc.team2363.robot.RobotMap.*;
 import static org.usfirst.frc.team2363.robot.subsystems.Drivetrain.ShifterState.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.usfirst.frc.team2363.robot.commands.ElevateToteCommand;
 import org.usfirst.frc.team2363.robot.commands.SequentialCommandGroup;
 import org.usfirst.frc.team2363.robot.commands.autonomous.TotesAndCansCommand;
@@ -46,6 +49,7 @@ import org.usfirst.frc.team2363.robot.util.SelectableCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -120,7 +124,13 @@ public class OI {
 		JoystickButton autoSelector3 = new JoystickButton(operatorControl, 3);
 
 		autoSelector = new AutonomousSelector(autoSelector1, autoSelector2, autoSelector3);
-
+		
+		List<Command> autoCommands = new ArrayList<>();
+		autoCommands.add(new TotesAndCansCommand());
+		autoCommands.add(new DriveAtSpeed());
+		
+		autoSelector.setCommands(autoCommands);
+		
 		//Elevator commands
 		SmartDashboard.putData("DriveToToteAtSpeed", new DriveAtSpeedToTote(48, 0.4, 60));
 		SmartDashboard.putData(new TotesAndCansCommand());
@@ -146,7 +156,7 @@ public class OI {
 		SmartDashboard.putData("Un-Tilt Can", new CanTiltCommand(TiltPosition.UNTILT));
 	}
 	
-	public SelectableCommand getAutoCommand() {
+	public Command getAutoCommand() {
 		return autoSelector.getSelectedCommand();
 
 	}
