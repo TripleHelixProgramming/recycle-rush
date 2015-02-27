@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class TotesAndCansCommand extends CommandGroup {
     
     public  TotesAndCansCommand() {
+    	super("Totes and Cans");
     	addParallel(new RollerGripperCommand(0, ClawPosition.OPEN));
         addParallel(new ElevateAtSpeed(ElevatorPosition.ONE_TOTE_CARRY));
         addSequential(new DriveAtSpeedToTote(36, 0.04, 81));

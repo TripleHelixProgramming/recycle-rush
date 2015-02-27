@@ -18,6 +18,7 @@ import org.usfirst.frc.team2363.robot.subsystems.DocOcArm;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.ToteElevator;
 import org.usfirst.frc.team2363.robot.subsystems.RollerGripper;
+import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
 import org.usfirst.frc.team2363.robot.util.VisionProcessor;
 
 /**
@@ -46,7 +47,7 @@ public class Robot extends IterativeRobot {
 	public static Compressor compressor;
 	public static VisionProcessor visionProcessor;
 	private Command autonomousCommand;
-
+			
 	public Robot() {
 		pdp = new PowerDistributionPanel();
 		drivetrain = new Drivetrain();
@@ -89,6 +90,8 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putBoolean("At Bottom", toteElevator.isAtBottomLimit());
 		Scheduler.getInstance().run();
+		
+		SmartDashboard.putData(oi.getAutoCommand());
 	}
 
 	public void autonomousInit() {

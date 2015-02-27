@@ -4,21 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.command.Command;
 
 public class AutonomousSelector extends BinarySelector {
 
-	private List<SelectableCommand> commands = new ArrayList<>();
+	private List<Command> commands = new ArrayList<>();
 
 	public AutonomousSelector(Button... buttons) {
 		super(buttons);
 	}
 
 
-	public void setCommands(List<SelectableCommand> commands) {
+	public void setCommands(List<Command> commands) {
 		this.commands = commands;
 	}
 
-	public SelectableCommand getSelectedCommand() {
+	public Command getSelectedCommand() {
 		if (getSelectedNumber() > commands.size() || commands.size() == 0) {
 			return new NoneCommand();
 		} else {
