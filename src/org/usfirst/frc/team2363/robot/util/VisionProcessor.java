@@ -62,9 +62,10 @@ public class VisionProcessor extends Thread {
 
 	public void run() {
 		while (runState) {
+			double  newCenter = 0;
 			if (session == 0) {
 				createSession();
-				center = 0;
+				newCenter = 0;
 			} else {
 				NIVision.IMAQdxGrab(session, frame, 1);
 				GetImageSizeResult size = NIVision.imaqGetImageSize(frame);
@@ -101,10 +102,10 @@ public class VisionProcessor extends Thread {
 					particles.sort(null);
 
 					ParticleReport tote = particles.get(0);
-					center = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2.0;
-					center = center - (size.width / 2);
+					newCenter = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2.0;
+					newCenter = newCenter - (size.width / 2);
 
-					SmartDashboard.putNumber("Center of Tote", center);
+					SmartDashboard.putNumber("Center of Tote", newCenter);
 
 					Rect square = new Rect();
 					square.left = (int)tote.BoundingRectLeft;
@@ -121,7 +122,7 @@ public class VisionProcessor extends Thread {
 					NIVision.imaqDrawShapeOnImage(frame, frame, square, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
 					NIVision.imaqDrawShapeOnImage(frame, frame, dot, DrawMode.PAINT_VALUE, ShapeMode.SHAPE_OVAL, 5);
 				} else {
-					center = 0;
+					newCenter = 0;
 				}
 
 
@@ -132,6 +133,7 @@ public class VisionProcessor extends Thread {
 				CameraServer.getInstance().setImage(frame);
 				Timer.delay(0.005);
 			}
+			center = newCenter;
 		}
 	}
 
