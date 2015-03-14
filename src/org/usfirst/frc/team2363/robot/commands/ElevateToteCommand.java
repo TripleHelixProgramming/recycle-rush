@@ -1,8 +1,6 @@
 package org.usfirst.frc.team2363.robot.commands;
 
-import org.usfirst.frc.team2363.robot.commands.elevator.ElevateAtSpeed;
-import org.usfirst.frc.team2363.robot.commands.grippers.CanTiltCommand;
-import org.usfirst.frc.team2363.robot.subsystems.BearHugger.TiltPosition;
+import org.usfirst.frc.team2363.robot.commands.elevators.tote.ElevateAtSpeed;
 import org.usfirst.frc.team2363.robot.subsystems.ToteElevator.ElevatorPosition;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -13,7 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class ElevateToteCommand extends CommandGroup {
     
     public  ElevateToteCommand(ElevatorPosition position) {
-    	addParallel(new CanTiltCommand(TiltPosition.UNTILT));
+//    	addParallel(new CanTiltCommand(TiltPosition.UNTILT));
     	addSequential(new ElevateAtSpeed(position));
     }
 }

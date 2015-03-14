@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
-import org.usfirst.frc.team2363.robot.commands.grippers.DocOcManual;
+import org.usfirst.frc.team2363.robot.commands.grippers.dococ.DocOcManual;
 import org.usfirst.frc.team2363.robot.util.ClawPosition;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -13,18 +13,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DocOcArm extends Subsystem {
+	
+//	public static final int ELEVATION_CALIBRATION = 660; 	//Competition
+	public static final int ELEVATION_CALIBRATION = 805;	//Practice
+//	public static final int YAW_CALIBRATION = 505; 			//Competition
+	public static final int YAW_CALIBRATION = 338;
 
 	public enum DocOcArmPosition {
-		LEFT_STOWED(380, 700),
-//		LEFT_STEP(500, 0),
-		LEFT_FLOOR(660, 505),
-		LEFT_HANDOFF(410, 450),
-		LEFT_OFF_FLOOR(525, 505),
-		PREP_FOR_HANDOFF(455, 485),
-		RIGHT_STOWED(0, 0),
-		RIGHT_STEP(0, 0),
-		RIGHT_FLOOR(0, 0),
-		RIGHT_HANDOFF(0, 0);
+		LEFT_STOWED(ELEVATION_CALIBRATION - 280, YAW_CALIBRATION - 70),
+		LEFT_FLOOR(ELEVATION_CALIBRATION, YAW_CALIBRATION),
+		LEFT_CLEAR_CAN(ELEVATION_CALIBRATION - 135, 391),
+		LEFT_SECOND_CAN(ELEVATION_CALIBRATION - 135, 391),
+		LEFT_HANDOFF(ELEVATION_CALIBRATION - 250, YAW_CALIBRATION - 55),
+		LEFT_OFF_FLOOR(ELEVATION_CALIBRATION - 135, YAW_CALIBRATION - 0),
+		PREP_FOR_HANDOFF(ELEVATION_CALIBRATION - 205, YAW_CALIBRATION);
 
 		private double elevation;
 		private double yaw;
@@ -57,14 +59,20 @@ public class DocOcArm extends Subsystem {
 //		yaw.setPID(0, 0.04, 0);
 		yaw.setPID(0.0001, 0, 0);
 		yaw.reverseOutput(false);
-		yaw.enableControl();
+		yaw.setForwardSoftLimit((int)DocOcArmPosition.LEFT_STOWED.getElevation());
+		yaw.enableForwardSoftLimit(false);
+		yaw.setReverseSoftLimit((int)DocOcArmPosition.LEFT_HANDOFF.getElevation());
+		yaw.enableReverseSoftLimit(false);
 
 		elevation = new CANTalon(extendMotorChannel);
 		elevation.changeControlMode(ControlMode.PercentVbus);
 		elevation.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 		elevation.setPID(0, 0.05, 0);
 		elevation.reverseOutput(true);
-		elevation.enableControl();
+		elevation.setForwardSoftLimit((int)DocOcArmPosition.LEFT_FLOOR.getElevation());
+		elevation.enableForwardSoftLimit(true);
+		elevation.setReverseSoftLimit((int)DocOcArmPosition.LEFT_STOWED.getElevation());
+		elevation.enableReverseSoftLimit(true);
 	}
 
 	@Override 
@@ -73,11 +81,11 @@ public class DocOcArm extends Subsystem {
 	}
 	
 	public void setYawControlMethod(ControlMode mode) {
-		yaw.changeControlMode(mode);
+		yaw.changeControlMode(ControlMode.PercentVbus);
 	}
 	
 	public void setElevationControlMethod(ControlMode mode) {
-		elevation.changeControlMode(mode);
+		elevation.changeControlMode(ControlMode.PercentVbus);
 	}
 	
 	public void setControlEnabled(boolean enable) {
@@ -94,7 +102,7 @@ public class DocOcArm extends Subsystem {
 		yaw.set(speed);
 	}
 
-	public void setElevationSpeed(double position) {
+	public void setElevation(double position) {
 		elevation.set(position);
 	}
 
@@ -107,7 +115,7 @@ public class DocOcArm extends Subsystem {
 	}
 	
 	public boolean isElevationOnTarget(DocOcArmPosition position) {
-		return Math.abs(elevation.getPosition() - position.getElevation()) < 10;
+		return Math.abs(elevation.getPosition() - position.getElevation()) < 3;
 	}
 	
 	public boolean isYawOnTarget(DocOcArmPosition position) {
@@ -129,6 +137,14 @@ public class DocOcArm extends Subsystem {
 	
 	public double getElevationSpeed() {
 		return elevation.getSpeed();
+	}
+	
+	public double getYawCurrent() {
+		return yaw.getOutputCurrent();
+	}
+	
+	public double getElevationCurrent() {
+		return elevation.getOutputCurrent();
 	}
 }
 

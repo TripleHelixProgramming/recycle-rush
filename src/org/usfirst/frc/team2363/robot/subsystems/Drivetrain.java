@@ -81,10 +81,12 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public double getLeftPosition() {
+		SmartDashboard.putNumber("Left DT Position", leftEncoder.getDistance());
 		return leftEncoder.getDistance();
 	}
 
 	public double getRightPosition() {
+		SmartDashboard.putNumber("Right DT Position", rightEncoder.getDistance());
 		return rightEncoder.getDistance();
 	}
 
@@ -115,5 +117,9 @@ public class Drivetrain extends Subsystem {
 			return imu.getYaw();
 		}
 		return 0;
+	}
+
+	public void resetHeading() {
+		imu.zeroYaw();
 	}
 }

@@ -3,6 +3,8 @@ package org.usfirst.frc.team2363.robot.util;
 import java.util.Comparator;
 import java.util.Vector;
 
+import org.usfirst.frc.team2363.robot.RobotMap;
+
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.DrawMode;
 import com.ni.vision.NIVision.GetImageSizeResult;
@@ -27,9 +29,9 @@ public class VisionProcessor extends Thread {
 	private Image binaryFrame;
 
 	//Constants
-	private static final NIVision.Range R_RANGE = new NIVision.Range(175, 230);	//Default hue range for yellow tote
-	private static final NIVision.Range G_RANGE = new NIVision.Range(140, 200);	//Default saturation range for yellow tote
-	private static final NIVision.Range B_RANGE = new NIVision.Range(50, 105);	//Default value range for yellow tote
+	private static final NIVision.Range R_RANGE = new NIVision.Range(190, 245);	//Default hue range for yellow tote
+	private static final NIVision.Range G_RANGE = new NIVision.Range(160, 220);	//Default saturation range for yellow tote
+	private static final NIVision.Range B_RANGE = new NIVision.Range(100, 140);	//Default value range for yellow tote
 	private static final double AREA_MINIMUM = 0.5; //Default Area minimum for particle as a percentage of total image area
 	private static final NIVision.ParticleFilterCriteria2[] CRITERIA = new NIVision.ParticleFilterCriteria2[1];
 	private static final NIVision.ParticleFilterOptions2 FILTER_OPTIONS = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
@@ -57,7 +59,7 @@ public class VisionProcessor extends Thread {
 	}
 
 	public double getCenter() {
-		return center;
+		return center - RobotMap.CENTER_CALIBRATION;
 	}
 
 	public void run() {
@@ -101,11 +103,15 @@ public class VisionProcessor extends Thread {
 					}
 					particles.sort(null);
 
-					ParticleReport tote = particles.get(0);
+					ParticleReport tote = particles.get(particles.size() - 1);
 					newCenter = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2.0;
 					newCenter = newCenter - (size.width / 2);
-
-					SmartDashboard.putNumber("Center of Tote", newCenter);
+					
+					SmartDashboard.putNumber("Vision Percentage", tote.PercentAreaToImageArea);
+					if (tote.PercentAreaToImageArea > 35) {
+						center = 0;
+						continue;
+					}
 
 					Rect square = new Rect();
 					square.left = (int)tote.BoundingRectLeft;
