@@ -5,17 +5,19 @@ public class RobotMap {
 	//Constants
 	public static final double HIGH_SPEED_SCALING = 0.5;
 	public static final double LOW_SPEED_SCALING = 0.9;
-	public static final double TOTE_ELEVATOR_DISTANCE_PER_PULSE = 0.015;
-	public static final double BEAR_HUGGER_ELEVATOR_DISTANCE_PER_PULSE = 0.030;
-	public static final int TOTE_ELEVATOR_MOTOR_MAX_CURRENT = 70;
 	public static final double ROBOT_TOP_SPEED = 11;
-	public static final double ROLLER_POWER = -1;
-	public static final double BEAR_HUGGER_ELEVATOR_TOP_LIMIT = 29;
+	public static final double CENTER_CALIBRATION = 20;
 
 	//Joysticks
 	public static final int PS4_PORT = 0;
 	public static final int OPERATOR_PORT = 1;
-	public static final int MANUAL_OPERATOR_PORT = 3;
+	public static final int MANUAL_OPERATOR_PORT = 2;
+	
+	//Manual Operator Buttons
+	public static final int DOC_OC_OPEN = 8;
+	public static final int DOC_OC_CLOSE = 7;
+	public static final int CLOSE_BEAR_HUGGER = 6;
+	public static final int OPEN_BEAR_HUGGER = 5;
 
 	//Operator Buttons
 	public static final int GROUND_BUTTON = 10;
@@ -28,11 +30,13 @@ public class RobotMap {
 	//PS4 Buttons
 	public static final int SHIFT_DOWN_BUTTON = 5; // R1
 	public static final int SHIFT_UP_BUTTON = 6; // L1
-	public static final int INTAKE_BUTTON = 7; // R2
-	public static final int EJECT_BUTTON = 8; // L2
+	public static final int INTAKE_BUTTON = 8; // R2
+	public static final int EJECT_BUTTON = 7; // L2
 	public static final int CARRY_BUTTON = 4; // TRIANGLE
-	public static final int SCORE_BUTTON = 2; // X
+	public static final int GROUND_WITHOUT_OPEN = 2;
+	public static final int SCORE_BUTTON = 1; // SQUARE
 	public static final int THROTTLE_SCALING_BUTTON = 14; // Touchpad ;)
+	public static final int LANDFILL_BUTTON = 1;
 
 	//Joystick Axis
 	public static final int LEFT_STICK_X = 0;
@@ -91,6 +95,6 @@ public class RobotMap {
 	public static final int ROLLER_STOP_LIMIT_CHANNEL = 2;
 
 	//PDP
-	public static final int ELEVATOR_PDP_CHANNEL_B = 0;
-	public static final int ELEVATOR_PDP_CHANNEL_A = 1;
+	public static final int ELEVATOR_PDP_CHANNEL_B = 2;
+	public static final int ELEVATOR_PDP_CHANNEL_A = 3;
 }

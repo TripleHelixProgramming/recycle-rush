@@ -1,7 +1,6 @@
 
 package org.usfirst.frc.team2363.robot;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -10,15 +9,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team2363.robot.commands.elevator.HomeBearHugger;
-import org.usfirst.frc.team2363.robot.commands.elevator.HomeToteElevator;
+import org.usfirst.frc.team2363.robot.commands.autonomous.TotesAndCansCommand;
 import org.usfirst.frc.team2363.robot.subsystems.BearHugger;
 import org.usfirst.frc.team2363.robot.subsystems.BearHuggerElevator;
 import org.usfirst.frc.team2363.robot.subsystems.DocOcArm;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2363.robot.subsystems.Drivetrain.ShifterState;
 import org.usfirst.frc.team2363.robot.subsystems.ToteElevator;
 import org.usfirst.frc.team2363.robot.subsystems.RollerGripper;
-import org.usfirst.frc.team2363.robot.util.AutonomousSelector;
 import org.usfirst.frc.team2363.robot.util.VisionProcessor;
 
 /**
@@ -72,30 +70,36 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		visionProcessor.start();
 		SmartDashboard.putData(toteElevator);
+		SmartDashboard.putData(leftDocOcArm);
 	}
 
 	public void disabledPeriodic() {
-		SmartDashboard.putNumber("Heading", drivetrain.getHeading());
+//		SmartDashboard.putNumber("Heading", drivetrain.getHeading());
 		
 		SmartDashboard.putNumber("Tote Encoder Position", toteElevator.getPosition());
-		SmartDashboard.putNumber("Tote Encoder Speed", toteElevator.getElevatorSpeed());
+//		SmartDashboard.putNumber("Tote Encoder Speed", toteElevator.getElevatorSpeed());
 		
 		SmartDashboard.putNumber("Bear Hugger Encoder Position", bearHuggerElevator.getPosition());
 		
 		SmartDashboard.putNumber("Doc Oc Arm Elevation Position", leftDocOcArm.getElevationPosition());
 		SmartDashboard.putNumber("Doc Oc Arm Yaw Position", leftDocOcArm.getYawPosition());
 		
-		SmartDashboard.putNumber("DOA Elevation Speed", leftDocOcArm.getElevationSpeed());
-		SmartDashboard.putNumber("Doc Oc Arm Yaw Speed", leftDocOcArm.getYawSpeed());
+//		SmartDashboard.putNumber("DOA Elevation Speed", leftDocOcArm.getElevationSpeed());
+//		SmartDashboard.putNumber("Doc Oc Arm Yaw Speed", leftDocOcArm.getYawSpeed());
 		
-		SmartDashboard.putBoolean("At Bottom", toteElevator.isAtBottomLimit());
+//		SmartDashboard.putBoolean("At Bottom", toteElevator.isAtBottomLimit());
 		Scheduler.getInstance().run();
 		
-		SmartDashboard.putData(oi.getAutoCommand());
+//		SmartDashboard.putData(oi.getAutoCommand());
+		
+//		SmartDashboard.putBoolean("Is Tote In", rollerGripper.isToteIn());
+		
+//		SmartDashboard.putNumber("Center of Tote", visionProcessor.getCenter());
 	}
 
 	public void autonomousInit() {
-		autonomousCommand = oi.getAutoCommand();
+//		autonomousCommand = oi.getAutoCommand();
+		autonomousCommand = new TotesAndCansCommand();
 		if (autonomousCommand != null) autonomousCommand.start();
 	}
 
@@ -104,12 +108,14 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		SmartDashboard.putNumber("Center of Tote", visionProcessor.getCenter());
 	}
 
 	public void teleopInit() {
 		if (autonomousCommand != null) autonomousCommand.cancel();
-		new HomeToteElevator().start();
-		new HomeBearHugger().start();
+//		new HomeToteElevator().start();
+//		new HomeBearHugger().start();
+		drivetrain.shift(ShifterState.LOW);
 	}
 
 	/**
@@ -126,21 +132,27 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("Tote Encoder Position", toteElevator.getPosition());
-		SmartDashboard.putNumber("Tote Encoder Speed", toteElevator.getElevatorSpeed());
-		SmartDashboard.putNumber("Heading", drivetrain.getHeading());
+//		SmartDashboard.putNumber("Tote Encoder Speed", toteElevator.getElevatorSpeed());
+//		SmartDashboard.putNumber("Heading", drivetrain.getHeading());
 		
 		SmartDashboard.putNumber("Bear Hugger Encoder Position", bearHuggerElevator.getPosition());
 		
 		SmartDashboard.putNumber("Doc Oc Arm Elevation Position", leftDocOcArm.getElevationPosition());
 		SmartDashboard.putNumber("Doc Oc Arm Yaw Position", leftDocOcArm.getYawPosition());
 		
-		SmartDashboard.putNumber("DOA Elevation Speed", leftDocOcArm.getElevationSpeed());
-		SmartDashboard.putNumber("Doc Oc Arm Yaw Speed", leftDocOcArm.getYawSpeed());
+//		SmartDashboard.putNumber("DOA Elevation Speed", leftDocOcArm.getElevationSpeed());
+//		SmartDashboard.putNumber("Doc Oc Arm Yaw Speed", leftDocOcArm.getYawSpeed());
 		
-		SmartDashboard.putBoolean("At Bottom", toteElevator.isAtBottomLimit());
+//		SmartDashboard.putBoolean("At Bottom", toteElevator.isAtBottomLimit());
 		
-		SmartDashboard.putNumber("Elevator Motor 1 Current", pdp.getCurrent(2));
-		SmartDashboard.putNumber("Elevator Motor 2 Current", pdp.getCurrent(3));
+//		SmartDashboard.putNumber("Elevator Motor 1 Current", pdp.getCurrent(2));
+//		SmartDashboard.putNumber("Elevator Motor 2 Current", pdp.getCurrent(3));
+//		SmartDashboard.putBoolean("Is Tote In", rollerGripper.isToteIn());
+		
+//		SmartDashboard.putNumber("POV", oi.ps4Controller.getPOV());
+		
+		SmartDashboard.putNumber("Tote Current 1", toteElevator.getElevatorCurrent1());
+		SmartDashboard.putNumber("Tote Current 2", toteElevator.getElevatorCurrent2());
 	}
 
 	/**

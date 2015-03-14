@@ -2,8 +2,7 @@ package org.usfirst.frc.team2363.robot.subsystems;
 
 import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
-import org.usfirst.frc.team2363.robot.RobotMap;
-import org.usfirst.frc.team2363.robot.commands.elevator.StopBearHuggerElevator;
+import org.usfirst.frc.team2363.robot.commands.elevators.bearhugger.BearHuggerManually;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -18,6 +17,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class BearHuggerElevator extends Subsystem {
 	
 	public static final double CAN_HAND_OFF = 3;
+	public static final double BEAR_HUGGER_ELEVATOR_DISTANCE_PER_PULSE = 0.030;
+	public static final double BEAR_HUGGER_ELEVATOR_TOP_LIMIT = 29;
+	public static final double BEAR_HUGGER_ELEVATOR_POWER = 1;
     
     private SpeedController elevator = new Talon(BEAR_HUGGER_ELEVATOR_TALON_CHANNEL);
     private Encoder encoder = new Encoder(BEAR_HUGGER_ELEVATOR_CHANNEL_A, BEAR_HUGGER_ELEVATOR_CHANNEL_B, true, EncodingType.k4X);
@@ -30,7 +32,7 @@ public class BearHuggerElevator extends Subsystem {
     }
     
     public void initDefaultCommand() {
-        setDefaultCommand(new StopBearHuggerElevator());
+        setDefaultCommand(new BearHuggerManually());
     }
     
     public void drive(double power) {
@@ -42,7 +44,7 @@ public class BearHuggerElevator extends Subsystem {
 	}
     
     public boolean isAtTopLimit() {
-    	return encoder.getDistance() > RobotMap.BEAR_HUGGER_ELEVATOR_TOP_LIMIT;
+    	return encoder.getDistance() > BEAR_HUGGER_ELEVATOR_TOP_LIMIT;
     }
 
 	public boolean isBetweenAdjustHeights() {

@@ -8,9 +8,7 @@ public class OperatorPanel extends Joystick {
 		operatorControl = new Joystick(port);
 	}
 
-	private Joystick operatorControl; {
-
-	}
+	private Joystick operatorControl;
 
 	//Control Panel Buttons
 	public static final int GROUND_BUTTON = 1;
