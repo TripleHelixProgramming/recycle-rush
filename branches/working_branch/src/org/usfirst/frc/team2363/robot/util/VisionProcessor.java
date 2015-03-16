@@ -71,6 +71,28 @@ public class VisionProcessor extends Thread {
 			} else {
 				NIVision.IMAQdxGrab(session, frame, 1);
 				GetImageSizeResult size = NIVision.imaqGetImageSize(frame);
+				
+				Rect topMask = new Rect();
+				topMask.left = 0;
+				topMask.top = 0;
+				topMask.height = size.height / 2;
+				topMask.width = size.width;
+				
+				Rect leftMask = new Rect();
+				leftMask.left = 0;
+				leftMask.top = 0;
+				leftMask.height = size.height;
+				leftMask.width = size.width / 4;
+				
+				Rect rightMask = new Rect();
+				rightMask.left = (int)(size.width * 0.75);
+				rightMask.top = 0;
+				rightMask.height = (int)(size.height / 2);
+				rightMask.width = size.width / 4;
+				
+				NIVision.imaqDrawShapeOnImage(frame, frame, topMask, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
+				NIVision.imaqDrawShapeOnImage(frame, frame, leftMask, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
+				NIVision.imaqDrawShapeOnImage(frame, frame, rightMask, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
 
 				//Threshold the image looking for yellow (tote color)
 				NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.RGB, R_RANGE, G_RANGE, B_RANGE);
