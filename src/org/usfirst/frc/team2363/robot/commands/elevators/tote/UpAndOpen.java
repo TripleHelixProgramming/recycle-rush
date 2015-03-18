@@ -7,6 +7,7 @@ import org.usfirst.frc.team2363.robot.subsystems.ToteElevator.ElevatorPosition;
 import org.usfirst.frc.team2363.robot.util.ClawPosition;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
  *
@@ -14,8 +15,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class UpAndOpen extends CommandGroup {
     
     public  UpAndOpen() {
-        addSequential(new ElevateAtSpeed(ElevatorPosition.TWO_TOTE_CARRY));
-        addParallel(new SimpleElevateBearHuggerToHandoff());
+    	addSequential(new WaitCommand(1));
+        addParallel(new ElevateAtSpeed(ElevatorPosition.TWO_TOTE_CARRY));
+//        addParallel(new SimpleElevateBearHuggerToHandoff());
         addParallel(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN));
     }
 }

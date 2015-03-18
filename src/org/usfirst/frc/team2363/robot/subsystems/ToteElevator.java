@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
 import org.usfirst.frc.team2363.robot.Robot;
+import static org.usfirst.frc.team2363.robot.Robot.bearHuggerElevator;
 import org.usfirst.frc.team2363.robot.commands.elevators.tote.ElevateToteManually;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -19,7 +20,7 @@ import static org.usfirst.frc.team2363.robot.RobotMap.*;
 public class ToteElevator extends Subsystem {
 	
 	public static final double TOTE_ELEVATOR_DISTANCE_PER_PULSE = 0.015;
-	public static final int TOTE_ELEVATOR_MOTOR_MAX_CURRENT = 60;
+	public static final int TOTE_ELEVATOR_MOTOR_MAX_CURRENT = 55;
 
 	public enum ElevatorPosition {
 		GROUND("Ground/Score", 0),
@@ -73,7 +74,8 @@ public class ToteElevator extends Subsystem {
 	public boolean setPower(double power) {
 		if (isAtTopLimit() && power > 0
 				|| isAtBottomLimit() && power < 0
-				|| aboveWorkingCurrent()) {
+				|| aboveWorkingCurrent()
+				|| bearHuggerElevator.isAtTopLimit() && power > 0) {
 			motor.set(0);
 			motor2.set(0);
 			return false;

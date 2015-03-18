@@ -17,17 +17,18 @@ public class DocOcArm extends Subsystem {
 //	public static final int ELEVATION_CALIBRATION = 660; 	//Competition
 	public static final int ELEVATION_CALIBRATION = 805;	//Practice
 //	public static final int YAW_CALIBRATION = 505; 			//Competition
-	public static final int YAW_CALIBRATION = 338;
+	public static final int YAW_CALIBRATION = 340;
 
 	public enum DocOcArmPosition {
 		LEFT_STOWED(ELEVATION_CALIBRATION - 280, YAW_CALIBRATION - 70),
 		LEFT_FLOOR(ELEVATION_CALIBRATION, YAW_CALIBRATION),
 		LEFT_CLEAR_CAN(ELEVATION_CALIBRATION - 135, 391),
-		LEFT_SECOND_CAN(ELEVATION_CALIBRATION - 135, 391),
+		LEFT_SECOND_CAN(ELEVATION_CALIBRATION - 135, 425),
 		LEFT_HANDOFF(ELEVATION_CALIBRATION - 250, YAW_CALIBRATION - 55),
-		LEFT_OFF_FLOOR(ELEVATION_CALIBRATION - 135, YAW_CALIBRATION - 0),
-		PREP_FOR_HANDOFF(ELEVATION_CALIBRATION - 205, YAW_CALIBRATION);
-
+		LEFT_OFF_FLOOR(ELEVATION_CALIBRATION - 225, YAW_CALIBRATION - 0),
+		PREP_FOR_HANDOFF(ELEVATION_CALIBRATION - 205, YAW_CALIBRATION),
+		LEFT_KNOCK_OVER(ELEVATION_CALIBRATION, YAW_CALIBRATION - 21);
+		
 		private double elevation;
 		private double yaw;
 
@@ -58,10 +59,10 @@ public class DocOcArm extends Subsystem {
 		yaw.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 //		yaw.setPID(0, 0.04, 0);
 		yaw.setPID(0.0001, 0, 0);
-		yaw.reverseOutput(false);
-		yaw.setForwardSoftLimit((int)DocOcArmPosition.LEFT_STOWED.getElevation());
+		yaw.reverseOutput(true);
+		yaw.setForwardSoftLimit((int)DocOcArmPosition.LEFT_HANDOFF.getElevation());
 		yaw.enableForwardSoftLimit(false);
-		yaw.setReverseSoftLimit((int)DocOcArmPosition.LEFT_HANDOFF.getElevation());
+		yaw.setReverseSoftLimit((int)DocOcArmPosition.LEFT_STOWED.getElevation());
 		yaw.enableReverseSoftLimit(false);
 
 		elevation = new CANTalon(extendMotorChannel);
@@ -99,7 +100,12 @@ public class DocOcArm extends Subsystem {
 	}
 
 	public void setYaw(double speed) {
-		yaw.set(speed);
+		if (speed > 0 && getYawPosition() > DocOcArmPosition.LEFT_SECOND_CAN.getYaw()
+				|| speed < 0 && getYawPosition() < DocOcArmPosition.LEFT_HANDOFF.getYaw() - 10) {
+			yaw.set(0);
+		} else {
+			yaw.set(speed);
+		}
 	}
 
 	public void setElevation(double position) {

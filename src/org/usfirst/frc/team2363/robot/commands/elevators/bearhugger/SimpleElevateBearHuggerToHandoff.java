@@ -2,6 +2,7 @@ package org.usfirst.frc.team2363.robot.commands.elevators.bearhugger;
 
 import static org.usfirst.frc.team2363.robot.Robot.bearHuggerElevator;
 
+import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.subsystems.BearHuggerElevator;
 
 import edu.wpi.first.wpilibj.command.Command;

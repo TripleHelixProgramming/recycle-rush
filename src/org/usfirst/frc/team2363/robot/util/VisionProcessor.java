@@ -30,8 +30,8 @@ public class VisionProcessor extends Thread {
 
 	//Constants
 	private static final NIVision.Range R_RANGE = new NIVision.Range(190, 245);	//Default hue range for yellow tote
-	private static final NIVision.Range G_RANGE = new NIVision.Range(160, 220);	//Default saturation range for yellow tote
-	private static final NIVision.Range B_RANGE = new NIVision.Range(100, 140);	//Default value range for yellow tote
+	private static final NIVision.Range G_RANGE = new NIVision.Range(150, 220);	//Default saturation range for yellow tote
+	private static final NIVision.Range B_RANGE = new NIVision.Range(70, 130);	//Default value range for yellow tote
 	private static final double AREA_MINIMUM = 0.5; //Default Area minimum for particle as a percentage of total image area
 	private static final NIVision.ParticleFilterCriteria2[] CRITERIA = new NIVision.ParticleFilterCriteria2[1];
 	private static final NIVision.ParticleFilterOptions2 FILTER_OPTIONS = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
@@ -87,12 +87,12 @@ public class VisionProcessor extends Thread {
 				Rect rightMask = new Rect();
 				rightMask.left = (int)(size.width * 0.75);
 				rightMask.top = 0;
-				rightMask.height = (int)(size.height / 2);
+				rightMask.height = size.height;
 				rightMask.width = size.width / 4;
 				
-				NIVision.imaqDrawShapeOnImage(frame, frame, topMask, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
-				NIVision.imaqDrawShapeOnImage(frame, frame, leftMask, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
-				NIVision.imaqDrawShapeOnImage(frame, frame, rightMask, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 1);
+				NIVision.imaqDrawShapeOnImage(frame, frame, topMask, DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 1);
+				NIVision.imaqDrawShapeOnImage(frame, frame, leftMask, DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 1);
+				NIVision.imaqDrawShapeOnImage(frame, frame, rightMask, DrawMode.PAINT_VALUE, ShapeMode.SHAPE_RECT, 1);
 
 				//Threshold the image looking for yellow (tote color)
 				NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.RGB, R_RANGE, G_RANGE, B_RANGE);

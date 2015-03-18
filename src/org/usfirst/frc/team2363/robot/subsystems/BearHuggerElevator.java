@@ -18,7 +18,7 @@ public class BearHuggerElevator extends Subsystem {
 	
 	public static final double CAN_HAND_OFF = 3;
 	public static final double BEAR_HUGGER_ELEVATOR_DISTANCE_PER_PULSE = 0.030;
-	public static final double BEAR_HUGGER_ELEVATOR_TOP_LIMIT = 29;
+	public static final double BEAR_HUGGER_ELEVATOR_TOP_LIMIT = 30;
 	public static final double BEAR_HUGGER_ELEVATOR_POWER = 1;
     
     private SpeedController elevator = new Talon(BEAR_HUGGER_ELEVATOR_TALON_CHANNEL);
@@ -45,6 +45,10 @@ public class BearHuggerElevator extends Subsystem {
     
     public boolean isAtTopLimit() {
     	return encoder.getDistance() > BEAR_HUGGER_ELEVATOR_TOP_LIMIT;
+    }
+    
+    public boolean isAtClearLimit() {
+    	return encoder.getDistance() > BEAR_HUGGER_ELEVATOR_TOP_LIMIT - 3;
     }
 
 	public boolean isBetweenAdjustHeights() {

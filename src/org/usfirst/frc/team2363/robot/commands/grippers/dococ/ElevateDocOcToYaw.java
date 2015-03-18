@@ -40,7 +40,7 @@ public class ElevateDocOcToYaw extends PIDCommand {
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
 		SmartDashboard.putNumber("Distance to Stowed", Math.abs(leftDocOcArm.getYawPosition() - DocOcArmPosition.LEFT_STOWED.getYaw()));
-		return Math.abs(leftDocOcArm.getYawPosition() - DocOcArmPosition.LEFT_STOWED.getYaw()) < 10;
+		return Math.abs(leftDocOcArm.getYawPosition() - DocOcArmPosition.LEFT_STOWED.getYaw()) < 5;
 	}
 
 	// Called once after isFinished returns true

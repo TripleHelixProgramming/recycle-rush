@@ -18,14 +18,20 @@ public class RobotMap {
 	public static final int DOC_OC_CLOSE = 7;
 	public static final int CLOSE_BEAR_HUGGER = 6;
 	public static final int OPEN_BEAR_HUGGER = 5;
+	public static final int BEAR_HUGGER_UP = 4;
+	public static final int BEAR_HUGGER_DOWN = 2;
 
 	//Operator Buttons
-	public static final int GROUND_BUTTON = 10;
-	public static final int CARRY_PLACE_BUTTON = 9;
-	public static final int STEP_BUTTON = 8;
-	public static final int ONE_TOTE_BUTTON = 7;
-	public static final int TWO_TOTE_BUTTON = 6;
-	public static final int HUMAN_PLAYER_BUTTON = 11;
+	public static final int GROUND_BUTTON = 1;
+	public static final int CARRY_PLACE_BUTTON = 2;
+	public static final int STEP_BUTTON = 3;
+	public static final int ONE_TOTE_BUTTON = 4;
+	public static final int TWO_TOTE_BUTTON = 5;
+	public static final int TILT_BUTTON = 7;
+	public static final int BEAR_OPEN_CLOSE = 6;
+	public static final int PICK_UP_BUTTON = 8;
+	public static final int DOC_OC_SEQUENCE_BUTTON = 9;
+	public static final int HUMAN_PLAYER_BUTTON = 10;
 
 	//PS4 Buttons
 	public static final int SHIFT_DOWN_BUTTON = 5; // R1
@@ -33,10 +39,12 @@ public class RobotMap {
 	public static final int INTAKE_BUTTON = 8; // R2
 	public static final int EJECT_BUTTON = 7; // L2
 	public static final int CARRY_BUTTON = 4; // TRIANGLE
-	public static final int GROUND_WITHOUT_OPEN = 2;
+	public static final int GROUND_WITHOUT_OPEN = 2; // X
 	public static final int SCORE_BUTTON = 1; // SQUARE
 	public static final int THROTTLE_SCALING_BUTTON = 14; // Touchpad ;)
-	public static final int LANDFILL_BUTTON = 1;
+	public static final int LANDFILL_BUTTON = 8;
+	public static final int BEAR_RESET_BUTTON = 3;
+	public static final int JUST_INTAKE_BUTTON = 5;
 
 	//Joystick Axis
 	public static final int LEFT_STICK_X = 0;

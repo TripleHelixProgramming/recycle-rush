@@ -32,9 +32,9 @@ public class FromFloorToBearHugger extends CommandGroup {
         addParallel(new BearHuggerGripperCommand(ClawPosition.OPEN));
         addSequential(new ElevateDocOcToYaw(1));
         addSequential(new ElevateBearHuggerCommand(BearHuggerElevator.CAN_HAND_OFF, 1));
-        addParallel(new BearHuggerGripperCommand(ClawPosition.CLOSE));
+        addParallel(new BearHuggerGripperCommand(ClawPosition.CLOSE), 0.5);
         addSequential(new WaitCommand(0.25));
-        addParallel(new ActuateDocOcGripper(ClawPosition.CLOSE));
+        addParallel(new ActuateDocOcGripper(ClawPosition.CLOSE), 0.5);
         addSequential(new WaitCommand(0.1));
         addSequential(new SimpleBearHuggerElevatorCommand(-BearHuggerElevator.BEAR_HUGGER_ELEVATOR_POWER), 0.25);
     }

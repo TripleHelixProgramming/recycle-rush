@@ -26,12 +26,10 @@ public class DocOcManual extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    		Robot.leftDocOcArm.setYaw(-Robot.oi.getOpRightX() * 0.2);
+    		Robot.leftDocOcArm.setYaw(Robot.oi.getOpRightX() * -0.2);
 //    		Robot.leftDocOcArm.setElevation(Robot.oi.getOpRightY() * 0.5);
     		double armDistance = Math.abs(DocOcArmPosition.LEFT_STOWED.getElevation() - leftDocOcArm.getElevationPosition());
     		double scaledArmDistance = armDistance / Math.abs(DocOcArmPosition.LEFT_STOWED.getElevation() - DocOcArmPosition.LEFT_FLOOR.getElevation());
-    		SmartDashboard.putNumber("Arm Distance", armDistance);
-    		SmartDashboard.putNumber("Arm Distance %", scaledArmDistance);
     		Robot.leftDocOcArm.setElevation(Robot.oi.getOpRightY() * getScaledValue(scaledArmDistance));
     }
 

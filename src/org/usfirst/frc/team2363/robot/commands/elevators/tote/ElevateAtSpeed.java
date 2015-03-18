@@ -21,7 +21,7 @@ public class ElevateAtSpeed extends PIDCommand {
 	private ElevatorPosition position;
 	
 	public ElevateAtSpeed(ElevatorPosition position) {
-		this(position, 15, -15);
+		this(position, 15, -30);
 	}
 	
 	public ElevateAtSpeed(ElevatorPosition position, double speed) {
