@@ -13,8 +13,8 @@ public class DrivePowerStraightAtTote extends Command {
 	private double power;
 	private double distance;
 	
-	private final double vP =  0.03;
-	private final double gP = 0.01;
+	private final double vP =  0.05;
+	private final double gP = 0.02;
 	
 	private double maxTurnPower = 0.3;
 
@@ -39,7 +39,8 @@ public class DrivePowerStraightAtTote extends Command {
     		speed = visionProcessor.getCenter() * vP;
     	}
     	
-    	double distanceTo = distance - (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
+//    	double distanceTo = distance - (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
+    	double distanceTo = distance - drivetrain.getLeftPosition();
     	SmartDashboard.putNumber("Distance to tote", distanceTo);
     	double drivePower = 0;
     	if (distanceTo > power) {
@@ -61,7 +62,8 @@ public class DrivePowerStraightAtTote extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(distance - (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2) < 1;
+    	return Math.abs(distance - drivetrain.getLeftPosition()) < 1;
+//        return Math.abs(distance - (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2) < 1;
     }
 
     // Called once after isFinished returns true

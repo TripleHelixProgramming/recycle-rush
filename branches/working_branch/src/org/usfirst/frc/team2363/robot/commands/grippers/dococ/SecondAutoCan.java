@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class SecondAutoCan extends CommandGroup {
     
     public  SecondAutoCan() {
-    	addParallel(new DocOcArmYawCommand(0.5, DocOcArmPosition.LEFT_SECOND_CAN));
-    	addParallel(new ElevateDocOcArmToCommand(DocOcArmPosition.LEFT_STOWED, 1));
+    	addSequential(new DocOcArmYawCommand(0.2, DocOcArmPosition.LEFT_SECOND_CAN));
+    	addParallel(new ElevateDocOcArmToCommand(DocOcArmPosition.LEFT_OFF_FLOOR, 1));
+
     }
 }

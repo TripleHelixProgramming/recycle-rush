@@ -12,17 +12,13 @@ public class ElevateBothAtSpeed extends ElevateAtSpeed {
 		super(position);
 		requires(bearHuggerElevator);
 	}
-
+	
 	@Override
 	protected void execute() {
 		super.execute();
-		if (getSetpoint() < 0) {
-			bearHuggerElevator.drive(-BearHuggerElevator.BEAR_HUGGER_ELEVATOR_POWER);
-		} else {
-			bearHuggerElevator.drive(0);
-		}
+		bearHuggerElevator.drive(-BearHuggerElevator.BEAR_HUGGER_ELEVATOR_POWER);
 	}
-	
+
 	@Override
 	protected void end() {
 		super.end();

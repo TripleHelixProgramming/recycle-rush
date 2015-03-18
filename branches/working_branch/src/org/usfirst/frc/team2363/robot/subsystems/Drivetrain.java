@@ -103,7 +103,7 @@ public class Drivetrain extends Subsystem {
 		leftEncoder.reset();
 	}
 	public void shift(ShifterState newState) {
-		if (newState == ShifterState.HIGH) {
+		if (newState == ShifterState.LOW) {
 			shiftSolenoid1.set(false);
 			shiftSolenoid2.set(true);
 		} else {

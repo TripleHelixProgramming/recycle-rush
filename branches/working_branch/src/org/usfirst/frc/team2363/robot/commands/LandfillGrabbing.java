@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2363.robot.commands;
 
 import static org.usfirst.frc.team2363.robot.Robot.toteElevator;
+import static org.usfirst.frc.team2363.robot.Robot.bearHuggerElevator;
 import static org.usfirst.frc.team2363.robot.Robot.rollerGripper;
 
 import org.usfirst.frc.team2363.robot.commands.elevators.ElevateBothAtSpeed;
@@ -18,7 +19,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  *
  */
 public class LandfillGrabbing extends CommandGroup {
-    
+	
+	private boolean atMaxHeight;
+	
     public LandfillGrabbing() {
     	addParallel(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE));
 		addParallel(new ElevateAtSpeed(ElevatorPosition.ONE_TOTE_CARRY));
@@ -29,8 +32,17 @@ public class LandfillGrabbing extends CommandGroup {
     }
     
     @Override
+    protected void initialize() {
+    	atMaxHeight = false;
+    }
+    
+    @Override
     protected boolean isFinished() {
-    	return super.isFinished() || toteElevator.isAtTopLimit();
+    	atMaxHeight = atMaxHeight || bearHuggerElevator.isAtTopLimit();
+    	if (atMaxHeight) {
+    		return false;
+    	}
+    	return super.isFinished();
     }
     
     @Override

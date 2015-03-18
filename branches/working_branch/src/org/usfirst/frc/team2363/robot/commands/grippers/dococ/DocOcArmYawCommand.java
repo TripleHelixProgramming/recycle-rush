@@ -15,7 +15,7 @@ public class DocOcArmYawCommand extends Command {
 
 	private double power;
 	private DocOcArmPosition position;
-	private final double P = 0.1;
+	private final double P = 0.05;
    
 	public DocOcArmYawCommand(double power, DocOcArmPosition position) {
         this.power = Math.abs(power);

@@ -41,8 +41,8 @@ public class DriveAtSpeed extends PIDCommand {
 
 	@Override
 	protected double returnPIDInput() {
-		SmartDashboard.putNumber("currentSpeed", (drivetrain.getLeftSpeed() + drivetrain.getRightSpeed()) / 2);
-		return (drivetrain.getLeftSpeed() + drivetrain.getRightSpeed()) / 2;
+//		SmartDashboard.putNumber("currentSpeed",(drivetrain.getLeftSpeed() + drivetrain.getRightSpeed()) / 2);
+		return drivetrain.getLeftSpeed();
 	}
 
 	@Override

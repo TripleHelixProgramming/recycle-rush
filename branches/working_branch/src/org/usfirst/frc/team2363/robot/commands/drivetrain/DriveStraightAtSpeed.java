@@ -2,6 +2,8 @@ package org.usfirst.frc.team2363.robot.commands.drivetrain;
 
 import static org.usfirst.frc.team2363.robot.Robot.drivetrain;
 
+import org.usfirst.frc.team2363.robot.util.RollingAverager;
+
 /**
  *
  */
@@ -11,6 +13,7 @@ public class DriveStraightAtSpeed extends DriveAtSpeed {
     private double maxSpeed;
     private final double P = 0.01;
     private final double dP = 3;
+    private RollingAverager averager = new RollingAverager(15, 0);
 
 	public DriveStraightAtSpeed(double maxSpeed, double distance) {
     	super();
@@ -19,7 +22,7 @@ public class DriveStraightAtSpeed extends DriveAtSpeed {
     }
 	
 	protected void execute() {
-		double currentDistance = (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
+		double currentDistance = drivetrain.getLeftPosition();
     	double distanceToTarget = distance - currentDistance;
     	double scaledSpeed = dP * distanceToTarget;
     	
@@ -38,11 +41,11 @@ public class DriveStraightAtSpeed extends DriveAtSpeed {
     }
     
     protected void usePIDOutput(double output) {
-    	drivetrain.arcadeDrive(-(getFeedForward() + output), P * drivetrain.getHeading());
+    	drivetrain.arcadeDrive(-(output), P * drivetrain.getHeading());
     }
     
     protected boolean isFinished() {
-    	double currentDistance = (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
+    	double currentDistance = drivetrain.getLeftPosition();
     	double distanceToTarget = distance - currentDistance;
     	return Math.abs(distanceToTarget) < 0.5;    }
 }

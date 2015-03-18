@@ -25,7 +25,7 @@ public class DriveAtSpeedToTote extends DriveAtSpeed {
 	}
 	@Override
 	protected void execute() {
-		double currentDistance = (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
+		double currentDistance = drivetrain.getLeftPosition();
     	double distanceToTarget = distance - currentDistance;
     	double scaledSpeed = dP * distanceToTarget;
     	
@@ -40,7 +40,7 @@ public class DriveAtSpeedToTote extends DriveAtSpeed {
 	
 	@Override
 	protected boolean isFinished() {
-		double currentDistance = (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
+		double currentDistance = drivetrain.getLeftPosition();
     	double distanceToTarget = distance - currentDistance;
     	return Math.abs(distanceToTarget) < 0.5;
 	}
