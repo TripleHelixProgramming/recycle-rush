@@ -3,6 +3,7 @@ package org.usfirst.frc.team2363.robot.commands.elevators.bearhugger;
 import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.subsystems.BearHugger.TiltPosition;
 import org.usfirst.frc.team2363.robot.subsystems.BearHuggerElevator;
+import org.usfirst.frc.team2363.robot.util.ClawPosition;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -35,6 +36,7 @@ public class HomeBearHugger extends Command {
     protected void end() {
     	Robot.bearHuggerElevator.drive(0);
     	Robot.bearHuggerElevator.resetAtBottom();
+    	Robot.bearHugger.openClaw(ClawPosition.CLOSE);
     }
 
     // Called when another command which requires one or more of the same

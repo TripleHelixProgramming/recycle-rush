@@ -33,7 +33,7 @@ public class TwoCanTwoTotesEject extends CommandGroup {
     	addSequential(new ElevateAtSpeed(ElevatorPosition.ONE_TOTE_CARRY, 20));
     	addParallel(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE));
     	addParallel(new DriveBearHuggerToClearLimit());
-    	addSequential(new DrivePowerStraightAtTote(0.55, 23));
+    	addSequential(new DrivePowerStraightAtTote(0.50, 29));
     	addParallel(new ElevateAtSpeed(ElevatorPosition.GROUND, 30));
     	addSequential(new ElevateDocOcArmToCommand(DocOcArmPosition.LEFT_SECOND_CAN, 1));
     	addSequential(new DocOcArmYawCommand(0.15, DocOcArmPosition.LEFT_FLOOR));

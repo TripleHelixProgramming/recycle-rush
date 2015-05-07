@@ -67,6 +67,7 @@ public class ElevateDocOcToYaw extends PIDCommand {
 	}
 	
 	private double getExpectedElevation(double x) {
-		return 2.3 * x + -134;
+//		return 2.3 * x + -134;
+		return 4 * x + -134;
 	}
 }

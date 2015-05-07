@@ -29,9 +29,9 @@ public class VisionProcessor extends Thread {
 	private Image binaryFrame;
 
 	//Constants
-	private static final NIVision.Range R_RANGE = new NIVision.Range(190, 245);	//Default hue range for yellow tote
-	private static final NIVision.Range G_RANGE = new NIVision.Range(150, 220);	//Default saturation range for yellow tote
-	private static final NIVision.Range B_RANGE = new NIVision.Range(70, 130);	//Default value range for yellow tote
+	private static final NIVision.Range R_RANGE = new NIVision.Range(210, 255);	//Default hue range for yellow tote
+	private static final NIVision.Range G_RANGE = new NIVision.Range(150, 255);	//Default saturation range for yellow tote
+	private static final NIVision.Range B_RANGE = new NIVision.Range(0, 100);	//Default value range for yellow tote
 	private static final double AREA_MINIMUM = 0.5; //Default Area minimum for particle as a percentage of total image area
 	private static final NIVision.ParticleFilterCriteria2[] CRITERIA = new NIVision.ParticleFilterCriteria2[1];
 	private static final NIVision.ParticleFilterOptions2 FILTER_OPTIONS = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);

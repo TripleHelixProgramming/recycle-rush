@@ -10,9 +10,12 @@ import org.usfirst.frc.team2363.robot.commands.ElevateToteCommand;
 import org.usfirst.frc.team2363.robot.commands.LandfillGrabbing;
 import org.usfirst.frc.team2363.robot.commands.autonomous.TotesAndCansCommand;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.DriveAtSpeed;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.DriveStraightAtSpeed;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.ShiftCommand;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.TurnToAngle;
 import org.usfirst.frc.team2363.robot.commands.elevators.AutomatedHPThing;
+import org.usfirst.frc.team2363.robot.commands.elevators.ElevateBothAtSpeed;
+import org.usfirst.frc.team2363.robot.commands.elevators.FinishStack;
 import org.usfirst.frc.team2363.robot.commands.elevators.PlaceToteStackCommandGroup;
 import org.usfirst.frc.team2363.robot.commands.elevators.bearhugger.HomeBearHugger;
 import org.usfirst.frc.team2363.robot.commands.elevators.bearhugger.SimpleBearHuggerElevatorCommand;
@@ -20,7 +23,9 @@ import org.usfirst.frc.team2363.robot.commands.elevators.tote.DefaultGround;
 import org.usfirst.frc.team2363.robot.commands.elevators.tote.HomeToteElevator;
 import org.usfirst.frc.team2363.robot.commands.elevators.tote.UpAndOpen;
 import org.usfirst.frc.team2363.robot.commands.grippers.FromFloorToBearHugger;
+import org.usfirst.frc.team2363.robot.commands.grippers.FromFloorToBearHuggerAndClear;
 import org.usfirst.frc.team2363.robot.commands.grippers.StowToBearHugger;
+import org.usfirst.frc.team2363.robot.commands.grippers.StowToBearHuggerAndClear;
 import org.usfirst.frc.team2363.robot.commands.grippers.bearhugger.BearHuggerGripperCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.bearhugger.CanTiltCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.dococ.ActuateDocOcGripper;
@@ -45,7 +50,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class OI {
 
-	private RollingAverager throttleAverager = new RollingAverager(15, 0);
+	private RollingAverager throttleAverager = new RollingAverager(20, 0);
 	//Controllers
 	public Joystick ps4Controller;
 	private Joystick operatorControl;
@@ -64,7 +69,8 @@ public class OI {
 		JoystickButton openBearHugger = new JoystickButton(manualOperatorControl, CLOSE_BEAR_HUGGER);
 		JoystickButton closeBearHugger = new JoystickButton(manualOperatorControl, OPEN_BEAR_HUGGER);
 		JoystickButton bearHuggerUp = new JoystickButton(manualOperatorControl, BEAR_HUGGER_UP);
-		JoystickButton bearHuggerDown = new JoystickButton(manualOperatorControl, BEAR_HUGGER_UP);
+		JoystickButton bearHuggerDown = new JoystickButton(manualOperatorControl, BEAR_HUGGER_DOWN);
+		JoystickButton homeBearHugger = new JoystickButton(manualOperatorControl, 1);
 		
 		//Manual Actions
 		openDocOcButton.whenPressed(new ActuateDocOcGripper(ClawPosition.OPEN));
@@ -72,10 +78,13 @@ public class OI {
 		openBearHugger.whenPressed(new BearHuggerGripperCommand(ClawPosition.OPEN));
 		closeBearHugger.whenPressed(new BearHuggerGripperCommand(ClawPosition.CLOSE));
 		
-		bearHuggerUp.whileHeld(new SimpleBearHuggerElevatorCommand(0.5));
-		bearHuggerUp.whenReleased(new SimpleBearHuggerElevatorCommand(0));
-		bearHuggerDown.whileHeld(new SimpleBearHuggerElevatorCommand(-0.5));
-		bearHuggerDown.whenReleased(new SimpleBearHuggerElevatorCommand(0));
+		
+		homeBearHugger.whenPressed(new HomeBearHugger());
+		
+		bearHuggerUp.whileHeld(new SimpleBearHuggerElevatorCommand(0.8));
+//		bearHuggerUp.whenReleased(new SimpleBearHuggerElevatorCommand(0));
+		bearHuggerDown.whileHeld(new SimpleBearHuggerElevatorCommand(-0.75));
+//		bearHuggerDown.whenReleased(new SimpleBearHuggerElevatorCommand(0));
 		
 		//Operator Buttons
 		JoystickButton groundButton = new JoystickButton(operatorControl, GROUND_BUTTON);
@@ -93,30 +102,32 @@ public class OI {
 		
 		
 		//OP Button Actions
-		tiltButton.whileHeld(new ActuateDocOcGripper(ClawPosition.OPEN));
-		tiltButton.whenReleased(new ActuateDocOcGripper(ClawPosition.CLOSE));
+		tiltButton.whileHeld(new CanTiltCommand(TiltPosition.TILT));
+		tiltButton.whenReleased(new CanTiltCommand(TiltPosition.UNTILT));
 		
 		bearHuggerButton.whileHeld(new BearHuggerGripperCommand(ClawPosition.OPEN));
 		bearHuggerButton.whenReleased(new BearHuggerGripperCommand(ClawPosition.CLOSE));
 		
-		pickUpButton.whileHeld(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE));
+//		pickUpButton.whileHeld(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE));
+//		pickUpButton.whenReleased(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN));
+		pickUpButton.whenPressed(new FromFloorToBearHuggerAndClear());
 		
-		docOcButton.whenPressed(new StowToBearHugger());
+		docOcButton.whenPressed(new StowToBearHuggerAndClear());
 		//End New Stuff
 		
 		groundButton.whenPressed(new DefaultGround());
 		
 		carryPlaceButton.whenPressed(new ElevateToteCommand(ElevatorPosition.CARRY));
-		carryPlaceButton.whenReleased(new DefaultGround());
+//		carryPlaceButton.whenReleased(new DefaultGround());
 
 		stepButton.whenPressed(new ElevateToteCommand(ElevatorPosition.STEP_CARRY));
-		stepButton.whenReleased(new ElevateToteCommand(ElevatorPosition.STEP_PLACE));
+//		stepButton.whenReleased(new ElevateToteCommand(ElevatorPosition.STEP_PLACE));
 
 		oneToteButton.whenPressed(new ElevateToteCommand(ElevatorPosition.ONE_TOTE_CARRY));
-		oneToteButton.whenPressed(new ElevateToteCommand(ElevatorPosition.ONE_TOTE_PLACE));
+//		oneToteButton.whenPressed(new ElevateToteCommand(ElevatorPosition.ONE_TOTE_PLACE));
 
 		twoToteButton.whenPressed(new ElevateToteCommand(ElevatorPosition.TWO_TOTE_CARRY));
-		twoToteButton.whenReleased(new ElevateToteCommand(ElevatorPosition.TWO_TOTE_PLACE));
+//		twoToteButton.whenReleased(new ElevateToteCommand(ElevatorPosition.TWO_TOTE_PLACE));
 
 		humanPlayerButton.whenPressed(new UpAndOpen());
 		humanPlayerButton.whenReleased(new AutomatedHPThing());
@@ -144,7 +155,7 @@ public class OI {
 		intakeButton.whileHeld(new LandfillGrabbing());
 		ejectButton.whenReleased(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN));
 		intakeButton.whenReleased(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN));
-		groundWithoutOpenButton.whenPressed(new ElevateToteCommand(ElevatorPosition.GROUND));
+		groundWithoutOpenButton.whenPressed(new FinishStack());
 		resetBearHugger.whenPressed(new HomeBearHugger());
 		justIntake.whileHeld(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE));
 		justIntake.whenReleased(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN));
@@ -192,6 +203,7 @@ public class OI {
 		SmartDashboard.putData(new ElevateDocOcToYaw(1));
 		SmartDashboard.putData(new TurnToAngle(90, 0.75));
 		SmartDashboard.putData("Stow To Bear", new StowToBearHugger());
+		SmartDashboard.putData("Drive Fo Eva", new DriveStraightAtSpeed(36, 81));
 	}
 	
 	public Command getAutoCommand() {

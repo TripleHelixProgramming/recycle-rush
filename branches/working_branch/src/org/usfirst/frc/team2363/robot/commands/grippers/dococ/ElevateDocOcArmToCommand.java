@@ -14,7 +14,7 @@ public class ElevateDocOcArmToCommand extends PIDCommand {
 	private DocOcArmPosition position;
 	
 	public ElevateDocOcArmToCommand(DocOcArmPosition position, double maxPower) {
-		super(0.02, 0, 0);
+		super(0.023, 0, 0);
 		requires(Robot.leftDocOcArm);
 		this.position = position;
 		setSetpoint(position.getElevation());
@@ -23,7 +23,7 @@ public class ElevateDocOcArmToCommand extends PIDCommand {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		Robot.leftDocOcArm.setElevationControlMethod(ControlMode.PercentVbus);
+//		Robot.leftDocOcArm.setElevationControlMethod(ControlMode.PercentVbus);
 	}
 
 	// Called repeatedly when this Command is scheduled to run

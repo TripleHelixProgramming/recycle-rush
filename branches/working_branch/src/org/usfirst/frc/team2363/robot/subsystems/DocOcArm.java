@@ -14,16 +14,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DocOcArm extends Subsystem {
 	
-//	public static final int ELEVATION_CALIBRATION = 660; 	//Competition
-	public static final int ELEVATION_CALIBRATION = 805;	//Practice
-//	public static final int YAW_CALIBRATION = 505; 			//Competition
-	public static final int YAW_CALIBRATION = 340;
+	public static final int ELEVATION_CALIBRATION = 542;//659	//Practice
+	public static final int YAW_CALIBRATION = 144;//286
 
 	public enum DocOcArmPosition {
 		LEFT_STOWED(ELEVATION_CALIBRATION - 280, YAW_CALIBRATION - 70),
 		LEFT_FLOOR(ELEVATION_CALIBRATION, YAW_CALIBRATION),
-		LEFT_CLEAR_CAN(ELEVATION_CALIBRATION - 135, 391),
-		LEFT_SECOND_CAN(ELEVATION_CALIBRATION - 135, 425),
+		LEFT_CLEAR_CAN(ELEVATION_CALIBRATION - 135, YAW_CALIBRATION + 51),
+		LEFT_SECOND_CAN(ELEVATION_CALIBRATION - 135, YAW_CALIBRATION + 85),
 		LEFT_HANDOFF(ELEVATION_CALIBRATION - 250, YAW_CALIBRATION - 55),
 		LEFT_OFF_FLOOR(ELEVATION_CALIBRATION - 225, YAW_CALIBRATION - 0),
 		PREP_FOR_HANDOFF(ELEVATION_CALIBRATION - 205, YAW_CALIBRATION),
@@ -100,7 +98,7 @@ public class DocOcArm extends Subsystem {
 	}
 
 	public void setYaw(double speed) {
-		if (speed > 0 && getYawPosition() > DocOcArmPosition.LEFT_SECOND_CAN.getYaw()
+		if (speed > 0 && getYawPosition() > 344
 				|| speed < 0 && getYawPosition() < DocOcArmPosition.LEFT_HANDOFF.getYaw() - 10) {
 			yaw.set(0);
 		} else {
@@ -121,7 +119,7 @@ public class DocOcArm extends Subsystem {
 	}
 	
 	public boolean isElevationOnTarget(DocOcArmPosition position) {
-		return Math.abs(elevation.getPosition() - position.getElevation()) < 3;
+		return Math.abs(elevation.getPosition() - position.getElevation()) < 5;
 	}
 	
 	public boolean isYawOnTarget(DocOcArmPosition position) {
@@ -151,6 +149,10 @@ public class DocOcArm extends Subsystem {
 	
 	public double getElevationCurrent() {
 		return elevation.getOutputCurrent();
+	}
+	
+	public boolean hasCan() {
+		return !elevation.isRevLimitSwitchClosed();
 	}
 }
 

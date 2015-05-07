@@ -26,7 +26,7 @@ public class LandfillGrabbing extends CommandGroup {
     	addParallel(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE));
 		addParallel(new ElevateAtSpeed(ElevatorPosition.ONE_TOTE_CARRY));
 		addSequential(new WaitForToteCommand());
-		addParallel(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE), 0.5);
+		addParallel(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN), 0.5);
 		addSequential(new ElevateBothAtSpeed(ElevatorPosition.GROUND));
         addSequential(new ElevateAtSpeed(ElevatorPosition.ONE_TOTE_CARRY));
     }

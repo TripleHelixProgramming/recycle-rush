@@ -26,6 +26,7 @@ public class JoystickDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
     	drivetrain.arcadeDrive(oi.getThrottle(), oi.getTurn());
     	timedPrinter.print(oi.getThrottle());
     	timedPrinter.print(oi.getTurn());

@@ -16,7 +16,7 @@ public class ElevateAtSpeed extends PIDCommand {
 
 	private double maxUp;
 	private double maxDown;
-	private double p = 3;
+	private double p = 3.5;
 
 	private ElevatorPosition position;
 	
@@ -67,8 +67,9 @@ public class ElevateAtSpeed extends PIDCommand {
 		double distanceToTarget = position.getHeight() - currentDistance;
 		
 		return Math.abs(distanceToTarget) < 0.25
-				|| (Robot.bearHuggerElevator.isAtTopLimit() && getSetpoint() > 0)
-				|| toteElevator.aboveWorkingCurrent();
+				|| Robot.bearHuggerElevator.isAtTopLimit() && getSetpoint() > 0
+				|| toteElevator.aboveWorkingCurrent()
+				|| toteElevator.isAtBottomLimit() && position == ElevatorPosition.GROUND;
 	}
 
 	// Called once after isFinished returns true
