@@ -8,6 +8,7 @@ import org.usfirst.frc.team2363.robot.commands.grippers.bearhugger.BearHuggerGri
 import org.usfirst.frc.team2363.robot.commands.grippers.dococ.ActuateDocOcGripper;
 import org.usfirst.frc.team2363.robot.commands.grippers.dococ.ElevateDocOcArmToCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.dococ.ElevateDocOcToYaw;
+import org.usfirst.frc.team2363.robot.commands.grippers.dococ.WaitForCan;
 import org.usfirst.frc.team2363.robot.subsystems.BearHuggerElevator;
 import org.usfirst.frc.team2363.robot.subsystems.DocOcArm.DocOcArmPosition;
 import org.usfirst.frc.team2363.robot.util.ClawPosition;
@@ -24,9 +25,9 @@ public class FromFloorToBearHugger extends CommandGroup {
 	private Date startTime;
     
     public  FromFloorToBearHugger() {
-    	addSequential(new ElevateDocOcArmToCommand(DocOcArmPosition.LEFT_FLOOR, 1));
+//    	addSequential(new ElevateDocOcArmToCommand(DocOcArmPosition.LEFT_FLOOR, 1));
     	addParallel(new ActuateDocOcGripper(ClawPosition.OPEN));
-    	addSequential(new WaitCommand(0.1));
+    	addSequential(new WaitCommand(0.2));
     	addParallel(new BearHuggerGripperCommand(ClawPosition.CLOSE));
         addSequential(new ElevateDocOcArmToCommand(DocOcArmPosition.PREP_FOR_HANDOFF, 1));
         addParallel(new BearHuggerGripperCommand(ClawPosition.OPEN));

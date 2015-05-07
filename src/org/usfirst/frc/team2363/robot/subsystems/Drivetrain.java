@@ -25,8 +25,8 @@ public class Drivetrain extends Subsystem {
 		LOW;
 	}
 	//Encoders
-	private Encoder leftEncoder = new Encoder(DRIVETRAIN_LEFT_ENCODER_CHANNEL_A, DRIVETRAIN_LEFT_ENCODER_CHANNEL_B, true, EncodingType.k4X);
-	private Encoder rightEncoder = new Encoder(DRIVETRAIN_RIGHT_ENCODER_CHANNEL_A, DRIVETRAIN_RIGHT_ENCODER_CHANNEL_B, true, EncodingType.k4X);
+	private Encoder leftEncoder = new Encoder(DRIVETRAIN_LEFT_ENCODER_CHANNEL_A, DRIVETRAIN_LEFT_ENCODER_CHANNEL_B, false, EncodingType.k4X);
+	private Encoder rightEncoder = new Encoder(DRIVETRAIN_RIGHT_ENCODER_CHANNEL_A, DRIVETRAIN_RIGHT_ENCODER_CHANNEL_B, false, EncodingType.k4X);
 
 	//IMU
 	private IMU imu;
@@ -65,7 +65,6 @@ public class Drivetrain extends Subsystem {
 
 			byte updateRateHz = 50;
 			imu = new IMU(serialPort, updateRateHz);
-			SmartDashboard.putData(imu);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -75,9 +74,19 @@ public class Drivetrain extends Subsystem {
 	public void initDefaultCommand() {
 		setDefaultCommand(new JoystickDrive());
 	}
+	
+	public double getTilt() {
+		return imu.getRoll();
+	}
 
 	public void arcadeDrive(double throttle, double turn) {
-		robotDrive.arcadeDrive(throttle, turn);
+		if (imu.getRoll() > 8.5) {
+			robotDrive.arcadeDrive(0.5, 0);
+		} else if (imu.getRoll() < -8.5) {
+			robotDrive.arcadeDrive(-0.5, 0);
+		} else {
+			robotDrive.arcadeDrive(throttle, turn);
+		}
 	}
 
 	public double getLeftPosition() {
@@ -111,7 +120,7 @@ public class Drivetrain extends Subsystem {
 			shiftSolenoid2.set(false);
 		}
 	}
-
+	
 	public double getHeading() {
 		if (!imu.isCalibrating()) {
 			return imu.getYaw();
@@ -121,5 +130,9 @@ public class Drivetrain extends Subsystem {
 
 	public void resetHeading() {
 		imu.zeroYaw();
+	}
+	
+	public boolean isGyroCalibrated() {
+		return imu.isConnected() && !imu.isCalibrating();
 	}
 }

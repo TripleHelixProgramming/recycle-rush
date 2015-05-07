@@ -82,6 +82,7 @@ public class RobotMap {
 	public static final int LEFT_DOC_OC_ARM_CLOSE_CHANNEL = 6;
 	
 	
+	
 	//Slenoids Module 2
 	public static final int BEAR_HUGGER_OPEN_CHANNEL = 2;
 	public static final int BEAR_HUGGER_CLOSE_CHANNEL = 1;

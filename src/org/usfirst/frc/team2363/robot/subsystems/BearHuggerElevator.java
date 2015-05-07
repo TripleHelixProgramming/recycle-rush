@@ -32,11 +32,15 @@ public class BearHuggerElevator extends Subsystem {
     }
     
     public void initDefaultCommand() {
-        setDefaultCommand(new BearHuggerManually());
     }
     
     public void drive(double power) {
-    	elevator.set(power);
+    	if (isAtTopLimit() && power > 0) {
+    		elevator.set(0);
+    	} else {
+    		elevator.set(power);
+    	}
+    	System.out.println("Bear Hugger Elevator Power: " + power);
     }
     
     public double getPosition() {

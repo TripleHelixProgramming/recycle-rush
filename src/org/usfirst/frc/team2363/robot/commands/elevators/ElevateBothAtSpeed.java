@@ -13,6 +13,11 @@ public class ElevateBothAtSpeed extends ElevateAtSpeed {
 		requires(bearHuggerElevator);
 	}
 	
+	public ElevateBothAtSpeed(ElevatorPosition position, double elevatorSpeed) {
+		super(position, elevatorSpeed);
+		requires(bearHuggerElevator);
+	}
+	
 	@Override
 	protected void execute() {
 		super.execute();

@@ -27,9 +27,9 @@ public class ToteElevator extends Subsystem {
 		CARRY("Carrying", 5),
 		STEP_CARRY("Carry for Step", 10.0),
 		STEP_PLACE("Place on Step", 8.2),
-		ONE_TOTE_CARRY("Carry for one tote", 17.5),
-		ONE_TOTE_PLACE("Place on one tote", 15.5),
-		TWO_TOTE_CARRY("Carry for two totes", 28),
+		ONE_TOTE_CARRY("Carry for one tote", 16.5),
+		ONE_TOTE_PLACE("Place on one tote", 10.5),
+		TWO_TOTE_CARRY("Carry for two totes", 29),
 		TWO_TOTE_PLACE("Place on two totes", 24);
 
 		private String displayName;

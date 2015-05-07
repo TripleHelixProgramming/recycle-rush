@@ -12,6 +12,7 @@ import org.usfirst.frc.team2363.robot.commands.grippers.dococ.ActuateDocOcGrippe
 import org.usfirst.frc.team2363.robot.commands.grippers.dococ.DocOcArmYawCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.dococ.ElevateDocOcArmToCommand;
 import org.usfirst.frc.team2363.robot.commands.grippers.dococ.SecondAutoCan;
+import org.usfirst.frc.team2363.robot.commands.grippers.dococ.WaitForCan;
 import org.usfirst.frc.team2363.robot.commands.grippers.rollergripper.RollerGripperCommand;
 import org.usfirst.frc.team2363.robot.subsystems.DocOcArm.DocOcArmPosition;
 import org.usfirst.frc.team2363.robot.subsystems.RollerGripper.RollerGripperDirection;
@@ -44,6 +45,7 @@ public class TotesAndCansCommand extends CommandGroup {
     	addParallel(new ActuateDocOcGripper(ClawPosition.OPEN));
     	addParallel(new DriveBearHuggerToClearLimit());
     	addSequential(new WaitCommand(0.25));
+    	addSequential(new WaitForCan());
     	addSequential(new SecondAutoCan());
 //    	addSequential(new WaitCommand(0.5));
     	addParallel(new ElevateAtSpeed(ElevatorPosition.ONE_TOTE_CARRY, 20));

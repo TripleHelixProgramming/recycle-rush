@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class PlaceToteStackCommandGroup extends CommandGroup {
 
 	public  PlaceToteStackCommandGroup() {
-		addSequential(new ElevateBothAtSpeed(ElevatorPosition.GROUND));
+		addSequential(new ElevateBothAtSpeed(ElevatorPosition.GROUND, 10.0));
 		addParallel(new BearHuggerGripperCommand(ClawPosition.OPEN));
 		addSequential(new DriveBearHuggerToTopLimit(), 0.1);
 		addParallel(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN), 0.1);

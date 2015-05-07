@@ -19,10 +19,10 @@ public class AutomatedHPThing extends CommandGroup {
 	public  AutomatedHPThing() {
 //		addParallel(new DriveBearHuggerToTopLimit());
 		addParallel(new RollerGripperCommand(RollerGripperDirection.IN, ClawPosition.CLOSE));
-		addParallel(new ElevateBothAtSpeed(ElevatorPosition.ONE_TOTE_CARRY));
+		addParallel(new ElevateBothAtSpeed(ElevatorPosition.ONE_TOTE_CARRY, 30));
 		addSequential(new WaitForToteCommand());
 		addParallel(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.CLOSE));
-		addSequential(new ElevateBothAtSpeed(ElevatorPosition.GROUND));
+		addSequential(new ElevateBothAtSpeed(ElevatorPosition.GROUND, 30));
 		addSequential(new ElevateAtSpeed(ElevatorPosition.TWO_TOTE_CARRY));
 		addParallel(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN), 0.5);
 	}

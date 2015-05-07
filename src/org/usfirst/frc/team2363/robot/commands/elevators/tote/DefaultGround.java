@@ -14,8 +14,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class DefaultGround extends CommandGroup {
 
 	public  DefaultGround() {
-		addParallel(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN));
-		addSequential(new WaitCommand(0.5));
+		addSequential(new RollerGripperCommand(RollerGripperDirection.OFF, ClawPosition.OPEN), 0.5);
 		addSequential(new ElevateAtSpeed(ElevatorPosition.GROUND));
 	}
 }

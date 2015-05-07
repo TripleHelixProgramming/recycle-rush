@@ -23,12 +23,16 @@ public class ElevateToteManually extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (toteElevator.isAtBottomLimit()) {
+    		toteElevator.resetAtBottom();
+    	}
+    	
     	if (Math.abs(Robot.oi.getElevatorPower()) > 0.1) {
     		toteElevator.setBrake(BrakePosition.OFF);
     	} else {
     		toteElevator.setBrake(BrakePosition.ENGAGED);
     	}
-    	toteElevator.setPower(Robot.oi.getElevatorPower() * -0.5);
+    	toteElevator.setPower(Robot.oi.getElevatorPower() * -0.68);
     }
 
     // Make this return true when this Command no longer needs to run execute()

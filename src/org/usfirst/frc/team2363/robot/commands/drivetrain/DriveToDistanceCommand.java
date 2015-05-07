@@ -10,6 +10,7 @@ import static org.usfirst.frc.team2363.robot.Robot.drivetrain;
  *
  */
 public class DriveToDistanceCommand extends PIDCommand {
+	private final double P = 0.04;
 		
     public DriveToDistanceCommand(double power, double distance) {
         super(0.16, 0, 0);
@@ -21,6 +22,7 @@ public class DriveToDistanceCommand extends PIDCommand {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	drivetrain.resetHeading();
     	drivetrain.shift(ShifterState.HIGH);
     	drivetrain.resetEncoders();
     }
@@ -52,6 +54,6 @@ public class DriveToDistanceCommand extends PIDCommand {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		drivetrain.arcadeDrive(-output, 0);
+		drivetrain.arcadeDrive(-output, P * drivetrain.getHeading());
 	}
 }

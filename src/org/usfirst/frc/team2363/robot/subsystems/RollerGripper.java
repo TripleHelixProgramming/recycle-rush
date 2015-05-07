@@ -19,6 +19,7 @@ public class RollerGripper extends Subsystem {
 	public enum RollerGripperDirection {
 		IN,
 		OUT,
+		OUT_SLOW,
 		OFF
 	}
 
@@ -43,6 +44,10 @@ public class RollerGripper extends Subsystem {
 			case OUT:
 				left.set(-ROLLER_POWER);
 				right.set(ROLLER_POWER);
+				break;
+			case OUT_SLOW:
+				left.set(-ROLLER_POWER/2);
+				right.set(ROLLER_POWER/2);
 				break;
 			case OFF:
 			default:

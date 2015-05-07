@@ -11,9 +11,8 @@ public class DriveStraightAtSpeed extends DriveAtSpeed {
 
     private double distance;
     private double maxSpeed;
-    private final double P = 0.01;
+    private final double P = -0.15;
     private final double dP = 3;
-    private RollingAverager averager = new RollingAverager(15, 0);
 
 	public DriveStraightAtSpeed(double maxSpeed, double distance) {
     	super();
@@ -41,7 +40,7 @@ public class DriveStraightAtSpeed extends DriveAtSpeed {
     }
     
     protected void usePIDOutput(double output) {
-    	drivetrain.arcadeDrive(-(output), P * drivetrain.getHeading());
+    	drivetrain.arcadeDrive(-output, P * drivetrain.getHeading());
     }
     
     protected boolean isFinished() {

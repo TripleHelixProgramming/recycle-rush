@@ -18,6 +18,7 @@ public class SimpleBearHuggerElevatorCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	System.out.println("Start Elevate Bear Hugger");
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -33,6 +34,7 @@ public class SimpleBearHuggerElevatorCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	bearHuggerElevator.drive(0);
+    	System.out.println("Finish Elevate Bear Hugger");
     }
 
     // Called when another command which requires one or more of the same
